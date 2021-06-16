@@ -1,0 +1,24 @@
+{
+    "pddlParser.executableOrService": "/home/xyz/catkin_ws/src/ROSPlan/rosplan_dependencies/VAL/parser",
+    "pddlParser.executableOptions": "$(domain) $(problem)",
+    "pddl.validatorPath": "/home/xyz/catkin_ws/src/ROSPlan/rosplan_dependencies/VAL/validate",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "logs": true,
+        "build": true,
+        ".catkin_tools": true,
+    },
+    "git.ignoreLimitWarning": true,
+    "python.autoComplete.extraPaths": [
+        "/home/xyz/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/xyz/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages"
+    ]
+}
