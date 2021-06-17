@@ -2,7 +2,6 @@
 
 import rospy
 from std_msgs.msg import String
-import tf
 
 def talker():
     pub = rospy.Publisher("chatter", String, queue_size=10)

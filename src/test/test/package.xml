@@ -55,6 +55,7 @@
   <exec_depend>python3</exec_depend>
   <exec_depend>python3-tensorboardX-pip</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>rosplan_knowledge_msgs</exec_depend>
   <!-- python3-rospkg与其他ros软件包不兼容，只能手动使用pip3安装 -->
   <!-- <exec_depend>python3-rospkg</exec_depend> -->
 
