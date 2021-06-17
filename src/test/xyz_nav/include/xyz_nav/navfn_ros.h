@@ -38,7 +38,7 @@
 #define NAVFN_NAVFN_ROS_H_
 
 #include <ros/ros.h>
-#include <navfn/navfn.h>
+#include <xyz_nav/navfn.h>
 #include <costmap_2d/costmap_2d.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Point.h>
@@ -46,7 +46,7 @@
 #include <vector>
 #include <nav_core/base_global_planner.h>
 #include <nav_msgs/GetPlan.h>
-#include <navfn/potarr_point.h>
+#include <xyz_nav/potarr_point.h>
 
 namespace xyz_nav {
   /**

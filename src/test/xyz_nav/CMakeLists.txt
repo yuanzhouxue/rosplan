@@ -83,7 +83,7 @@ install(TARGETS xyz_nav
        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
        )
 
-install(DIRECTORY include/navfn/
+install(DIRECTORY include/xyz_nav/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 

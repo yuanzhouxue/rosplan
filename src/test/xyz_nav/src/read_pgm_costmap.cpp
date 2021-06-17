@@ -27,7 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <navfn/navfn.h>
+#include <xyz_nav/navfn.h>
 #include <stdlib.h>
 #include <stdint.h>
 

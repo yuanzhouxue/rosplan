@@ -30,8 +30,8 @@
 #include <string>
 #include <ros/package.h>
 #include <gtest/gtest.h>
-#include <navfn/navfn.h>
-#include <navfn/read_pgm_costmap.h>
+#include <xyz_nav/navfn.h>
+#include <xyz_nav/read_pgm_costmap.h>
 
 // Load a willow garage costmap and return a NavFn instance using it.
 // If the costmap file fails to load, returns NULL.

@@ -43,7 +43,7 @@
 //
 
 
-#include <navfn/navfn.h>
+#include <xyz_nav/navfn.h>
 #include <ros/console.h>
 
 namespace xyz_nav {
