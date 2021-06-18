@@ -1,23 +1,23 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "",
-        "limitSymbolsToIncludedHeaders": true
-      },
-      "includePath": [
-        "/home/xyz/catkin_ws/devel/include/**",
-        "/home/xyz/catkin_ws/src/occupancy_grid_utils/include/**",
-        "/home/xyz/catkin_ws/src/rosplan_demos/rosplan_demos_interfaces/rosplan_interface_mapping/include/**",
-        "/home/xyz/catkin_ws/src/rosplan_demos/rosplan_demos_interfaces/rosplan_interface_movebase/include/**",
-        "/home/xyz/catkin_ws/src/ROSPlan/rosplan_knowledge_base/include/**",
-        "/home/xyz/catkin_ws/src/ROSPlan/rosplan_planning_system/include/**",
-        "/home/xyz/catkin_ws/src/test/xyz_nav/include/**",
-        "/opt/ros/melodic/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/xyz/rosplan_ws/devel/include/**",
+                "/home/xyz/rosplan_ws/src/occupancy_grid_utils/include/**",
+                "/home/xyz/rosplan_ws/src/rosplan_demos/rosplan_demos_interfaces/rosplan_interface_mapping/include/**",
+                "/home/xyz/rosplan_ws/src/rosplan_demos/rosplan_demos_interfaces/rosplan_interface_movebase/include/**",
+                "/home/xyz/rosplan_ws/src/ROSPlan/rosplan_knowledge_base/include/**",
+                "/home/xyz/rosplan_ws/src/ROSPlan/rosplan_planning_system/include/**",
+                "/home/xyz/rosplan_ws/src/test/xyz_nav/include/**",
+                "/opt/ros/melodic/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS"
+        }
+    ],
+    "version": 4
 }
