@@ -285,8 +285,8 @@ namespace xyz_nav {
         planner_->setStart(map_goal);
         planner_->setGoal(map_start);
 
-        // bool success = planner_->calcNavFnAstar();
-        planner_->calcNavFnDijkstra(true);
+        bool success = planner_->calcNavFnAstar();
+        // planner_->calcNavFnDijkstra(true);
 
         double resolution = costmap_->getResolution();
         geometry_msgs::PoseStamped p, best_pose;
