@@ -43,7 +43,7 @@ $param"
 
 # automatically generate PDDL problem from KB snapshot (e.g. fetch knowledge from KB and create problem.pddl)
 echo "Calling problem generator.";
-rosservice call /rosplan_problem_interface/problem_generation_server;
+# rosservice call /rosplan_problem_interface/problem_generation_server;
 
 # make plan (e.g. call popf to create solution)
 echo "Calling planner interface.";

@@ -8,7 +8,7 @@
 
 	(:predicates
 		(robot_at ?v - robot ?wp - waypoint)
-		; (connected ?from ?to - waypoint)
+		(connected ?from ?to - waypoint)
 		(visited ?wp - waypoint)
 	)
 
@@ -20,12 +20,12 @@
 	(:durative-action goto_waypoint
 		:parameters (?v - robot ?from ?to - waypoint)
 		; :duration ( = ?duration (distance ?from ?to))
-		:duration (= ?duration 1)
+		:duration (= ?duration 10)
 		; 添加了动作代价，语法错误
 		; :action-costs ( = (distance ?from ?to))
 		:condition (and
 			(at start (robot_at ?v ?from))
-			; (over all (connected ?from ?to))
+			(over all (connected ?from ?to))
 		)
 		:effect (and
 			(at end (visited ?to))
