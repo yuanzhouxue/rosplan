@@ -46,7 +46,7 @@
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="action_server" value="/move_base" />
         <param name="pddl_action_name" value="goto_waypoint" />
-        <param name="probility" value="0.3" />
+        <param name="probility" value="0.7" />
         <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
         <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
     </node>

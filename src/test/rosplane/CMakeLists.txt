@@ -144,6 +144,9 @@ include_directories(
 add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
 target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 
+add_executable(rosplane_monitor_node src/RosplanEMonitor.cpp)
+target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
