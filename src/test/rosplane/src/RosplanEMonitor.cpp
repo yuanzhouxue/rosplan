@@ -10,7 +10,7 @@ namespace rosplane {
         _plan_dispatch_cancel_client = nh.serviceClient<std_srvs::Empty>("/rosplan_plan_dispatcher/cancel_dispatch");
     }
     void ROSPlanEMonitor::action_feedback_callback(const rosplan_dispatch_msgs::ActionFeedback::ConstPtr& msg) {
-        if (msg->status == "action failed") {
+        if (msg->status == rosplan_dispatch_msgs::ActionFeedback::ACTION_FAILED) {
             ROS_ERROR("Rosplane replanning");
             std_srvs::Empty empty;
             _plan_dispatch_cancel_client.call(empty);
