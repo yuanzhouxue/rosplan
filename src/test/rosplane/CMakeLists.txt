@@ -19,7 +19,16 @@ find_package(catkin REQUIRED COMPONENTS
     rosplan_planning_system
     actionlib
     tf2
+    tf
+    tiago_pick_demo
+    play_motion_msgs
+    tf2_ros
+    image_transport
+    cv_bridge
 )
+
+find_package(OpenCV REQUIRED COMPONENTS
+    opencv_highgui)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -143,6 +152,12 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
 target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
+
+add_executable(pickup_action_node src/PickUpAction.cpp)
+target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
+
+add_executable(observe_action_node src/observe_action.cpp)
+target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(rosplane_monitor_node src/RosplanEMonitor.cpp)
 target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})

@@ -40,7 +40,6 @@
         "/home/xyz/rosplan_ws/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages"
     ],
-    "pddl.selectedPlanner": "popf",
     "files.associations": {
         "*.rviz": "yaml",
         "array": "cpp",

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ROSPlan turtlebot3 demo with ROSPlan -->
+
+    <arg name="map_file" default="$(find rosplan_turtlebot3_demo)/maps/playground.yaml" />
+    <arg name="gazebo_gui" default="false" />
+    <arg name="show_rviz" default="true" />
+
+    <arg name="robot" default="steel" />
+    <arg name="public_sim" default="true" />
+    <!-- <arg name="gzclient" default="true" /> -->
+    <arg name="recording" default="false" />
+
+    <env name="LC_NUMERIC" value="C" />
+
+    <!-- Gazebo simulation -->
+    <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
+        <arg name="robot" value="$(arg robot)" />
+        <arg name="public_sim" value="$(arg public_sim)" />
+        <arg name="world" value="tabletop_cube" />
+        <arg name="gui" value="$(arg gazebo_gui)" />
+        <arg name="recording" value="$(arg recording)" />
+    </include>
+
+    <!-- roadmap (random waypoint generation) -->
+    <include file="$(find rosplan_interface_mapping)/launch/rosplan_roadmap_server.launch" />
+
+    <!-- ROSPlan -->
+    <include file="$(find rosplan_planning_system)/launch/interfaced_planning_system.launch">
+        <arg name="domain_path" value="$(find test)/pddls/graspDomain.pddl" />
+        <!-- load a particular initial state into KB at startup (optional) -->
+        <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
+        <arg name="problem_path" value="$(find test)/pddls/graspProblem.pddl" />
+        <!-- automatically generated pddl problem will be created here -->
+        <arg name="autom_gen_problem_path" value="$(find test)/pddls/graspProblem.pddl" />
+        <!-- planner will produce output plan and write to this location -->
+        <arg name="data_path" value="$(find rosplan_turtlebot3_demo)/common/" />
+    </include>
+
+    <!-- rosplan move base action interface, makes link between rosplan dispatcher and hardware -->
+    <!-- <node pkg="rosplan_interface_movebase" type="rpmovebase" name="rosplan_interface_movebase" respawn="false" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="action_server" value="/move_base" />
+        <param name="pddl_action_name" value="goto_waypoint" />
+        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+    </node> -->
+
+    <!-- <node pkg="rosplane" type="simulated_movebase_node" name="simulated_movebase_action" respawn="false" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="action_server" value="/move_base" />
+        <param name="pddl_action_name" value="goto_waypoint" />
+        <param name="probility" value="0.7" />
+        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+    </node> -->
+
+    <include file="$(find rosplane)/launch/tiago_pick.launch" >
+        <arg name="pddl_action_name" value="grasp"/>
+    </include>
+
+    <node name="observe_action_interface" pkg="rosplane" type="observe_action_node" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pddl_action_name" value="observing" />
+        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+    </node>
+
+    <!-- visualisation of robot sensor data -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosplan_turtlebot3_demo)/config/turtlebot3.rviz" if="$(arg show_rviz)" /> -->
+    <group if="$(arg show_rviz)">
+        <node name="pick_demo_rviz" pkg="rviz" type="rviz" args="-d $(find tiago_pick_demo)/config/rviz/tiago_pick_demo.rviz" />
+    </group>
+
+</launch>
