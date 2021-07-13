@@ -30,6 +30,7 @@
 #include <play_motion_msgs/PlayMotionAction.h>
 #include <play_motion_msgs/PlayMotionGoal.h>
 #include <moveit_msgs/MoveItErrorCodes.h>
+#include <control_msgs/QueryTrajectoryState.h>
 
 
 using std::string;
@@ -63,6 +64,8 @@ namespace KCL_rosplan {
 
         /// nodehandle, manages e.g. subscriptions and publications
         ros::NodeHandle nh_;
+
+        bool robot_prepared = false;
 
         /// waypoints reference frame
         std::string waypoint_frameid_;
