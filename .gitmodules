@@ -1,3 +1,6 @@
 [submodule "src/ROSPlan"]
 	path = src/ROSPlan
 	url = https://gitee.com/yuanzhouxue/ROSPlan.git
+[submodule "src/tiago"]
+	path = src/tiago
+	url = https://gitee.com/yuanzhouxue/tiago.git
