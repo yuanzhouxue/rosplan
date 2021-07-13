@@ -5,12 +5,33 @@ namespace KCL_rosplan {
     RPObserveAction::RPObserveAction() {
         ros::NodeHandle nh("~");
         pub_head_topic = nh.advertise<control_msgs::PointHeadActionGoal>("/head_controller/point_head_action/goal", 1);
+        pub_arm_topic = nh.advertise<trajectory_msgs::JointTrajectory>("/arm_controller/command", 1);
         imageTopic = "/xtion/rgb/image_raw";
         image_transport::TransportHints transportHints("compressed");
         image_transport::ImageTransport it(nh);
         img_sub = it.subscribe(imageTopic, 1, &RPObserveAction::observeCallback, this, transportHints);
-        // ros::spin();
-        // cv::destroyWindow("test");
+        service = nh.advertiseService("my_observe_service", &RPObserveAction::serviceCallback, this);
+
+        head_action_goal.header.frame_id = "/base_link";
+        head_action_goal.goal.max_velocity = 1.0;
+        head_action_goal.goal.min_duration = ros::Duration(1.0);
+        head_action_goal.goal.target.header.frame_id = "/base_link";
+        head_action_goal.goal.pointing_axis.x = 1.0;
+        head_action_goal.goal.pointing_frame = "/head_2_link";
+
+        arm_action_goal.joint_names.push_back("arm_1_joint");
+        arm_action_goal.joint_names.push_back("arm_2_joint");
+        arm_action_goal.joint_names.push_back("arm_3_joint");
+        arm_action_goal.joint_names.push_back("arm_4_joint");
+        arm_action_goal.joint_names.push_back("arm_5_joint");
+        arm_action_goal.joint_names.push_back("arm_6_joint");
+        arm_action_goal.joint_names.push_back("arm_7_joint");
+    }
+
+    bool RPObserveAction::serviceCallback(std_srvs::EmptyRequest& req, std_srvs::EmptyResponse& res) {
+        const rosplan_dispatch_msgs::ActionDispatch a;
+        rosplan_dispatch_msgs::ActionDispatch::ConstPtr pa(new rosplan_dispatch_msgs::ActionDispatch());
+        return concreteCallback(pa);
     }
 
     void RPObserveAction::observeCallback(const sensor_msgs::ImageConstPtr& imgMsg) {
@@ -24,24 +45,7 @@ namespace KCL_rosplan {
         // ros nodehandle init
         ros::NodeHandle nh;
 
-
-        // tf listener and stampedTransform
-        tf::TransformListener listener;
-        tf::StampedTransform transform;
-
-        // move head to look hand
-
-
-        // msg init
-        control_msgs::PointHeadActionGoal goal;
-        goal.header.frame_id = "/base_link";
-        goal.goal.max_velocity = 1.0;
-        goal.goal.min_duration = ros::Duration(1.0);
-        goal.goal.target.header.frame_id = "/base_link";
-        goal.goal.pointing_axis.x = 1.0;
-        goal.goal.pointing_frame = "/head_2_link";
-
-
+        // move head to look hand        
         geometry_msgs::PoseStamped ps;
         ros::Time time;
         std::string err_string;
@@ -59,20 +63,52 @@ namespace KCL_rosplan {
                 std::cerr << e.what() << '\n';
             }
         }
-        goal.goal.target.point.x = transform.getOrigin().x();
-        goal.goal.target.point.y = transform.getOrigin().y();
-        goal.goal.target.point.z = transform.getOrigin().z();
-        pub_head_topic.publish(goal);
+        head_action_goal.goal.target.point.x = transform.getOrigin().x();
+        head_action_goal.goal.target.point.y = transform.getOrigin().y();
+        head_action_goal.goal.target.point.z = transform.getOrigin().z();
+        pub_head_topic.publish(head_action_goal);
 
+        // rotate wrist test
+        // get the arms' position
+        auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/arm_controller/state");
         
 
-        // get the image data
+        // first position
+        arm_action_goal.points.resize(2);
+        arm_action_goal.points[0].positions.resize(7);
+        arm_action_goal.points[0].positions[0] = res->actual.positions[0];
+        arm_action_goal.points[0].positions[1] = res->actual.positions[1];
+        arm_action_goal.points[0].positions[2] = res->actual.positions[2];
+        arm_action_goal.points[0].positions[3] = res->actual.positions[3];
+        arm_action_goal.points[0].positions[4] = res->actual.positions[4];
+        arm_action_goal.points[0].positions[5] = res->actual.positions[5];
+        arm_action_goal.points[0].positions[6] = -2.0;
+        arm_action_goal.points[0].velocities.resize(7);
+        for (int i = 0; i < 7; i++) {
+            arm_action_goal.points[0].velocities[i] = 0.0;
+        }
 
-        // cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
+        arm_action_goal.points[0].time_from_start = ros::Duration(2.0);
 
-        // cv_bridge::CvImagePtr cvImgMsg;
+        // second position
+        arm_action_goal.points[1].positions.resize(7);
+        arm_action_goal.points[1].positions[0] = res->actual.positions[0];
+        arm_action_goal.points[1].positions[1] = res->actual.positions[1];
+        arm_action_goal.points[1].positions[2] = res->actual.positions[2];
+        arm_action_goal.points[1].positions[3] = res->actual.positions[3];
+        arm_action_goal.points[1].positions[4] = res->actual.positions[4];
+        arm_action_goal.points[1].positions[5] = res->actual.positions[5];
+        arm_action_goal.points[1].positions[6] = 2.0;
+        arm_action_goal.points[1].velocities.resize(7);
+        for (int i = 0; i < 7; i++) {
+            arm_action_goal.points[1].velocities[i] = 0.0;
+        }
 
+        arm_action_goal.points[1].time_from_start = ros::Duration(4.0);
 
+        arm_action_goal.header.stamp = ros::Time::now() + ros::Duration(4.0);
+
+        pub_arm_topic.publish(arm_action_goal);
         return true;
     }
 }
