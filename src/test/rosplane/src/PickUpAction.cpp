@@ -100,7 +100,11 @@ namespace KCL_rosplan {
 
     /* action dispatch callback */
     bool PickUpAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-        prepareRobot();
+        if (!robot_prepared) {
+            prepareRobot();
+            robot_prepared = true;
+        }
+
         ROS_INFO("(%s): spherical_grasp_gui: Waiting for an aruco detection", node_name.c_str());
         auto aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
         auto newFrameId = stripLeadingSlash(aruco_pose->header.frame_id);
@@ -142,6 +146,23 @@ namespace KCL_rosplan {
             ROS_INFO("(%s): Failed to pick, not trying further.", node_name.c_str());
             return false;
         }
+
+        // FIXME: 读取关节值来判断是否抓取成功是不可行的（因为始终会读取到程序设定的值而不是实际的值）
+        // ros::ServiceClient gripper_controller_client = nh_.serviceClient<control_msgs::QueryTrajectoryState>("/gripper_controller/query_state");
+        // control_msgs::QueryTrajectoryState para;
+        // para.request.time = ros::Time::now();
+        // gripper_controller_client.call(para);
+        // for (int i = 0; i < para.response.name.size(); ++i) {
+        //     ROS_INFO("(%s): %s: %f", node_name.c_str(), para.response.name[i].c_str(), para.response.position[i]);
+        // }
+        // double obj_width = nh_.param<double>("/pick_and_place_server/object_width", -1);
+        // double obj_depth = nh_.param<double>("/pick_and_place_server/object_depth", -1);
+        // if (para.response.position[0] + para.response.position[1] < min(obj_depth, obj_width)) {
+        //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
+        //     return false;
+        // }
+
+
         liftTorso();
         ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());
         play_motion_msgs::PlayMotionGoal pmg;

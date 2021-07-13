@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="pddl_action_name" />
+    <arg name="pddl_action_name" default="grasp" />
     <arg name="knowledge_base" default="rosplan_knowledge_base" />
     <arg name="action_server" default="/move_base" />
     <!-- <arg name="pddl_action_name" default="goto_waypoint" /> -->
@@ -25,7 +25,7 @@
     <rosparam command="load" file="$(find tiago_pick_demo)/config/pick_motions.yaml" />
 
     <!-- Pick & place server -->
-    <node name="pick_and_place_server" pkg="tiago_pick_demo" type="pick_and_place_server.py" output="screen">
+    <node name="pick_and_place_server" pkg="rosplane" type="pick_and_place_server.py" output="screen">
         <rosparam command="load" file="$(find tiago_pick_demo)/config/pick_and_place_params.yaml" />
         <param name="object_width" value="0.05" />
         <param name="object_height" value="0.1" />
