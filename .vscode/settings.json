@@ -1,7 +1,19 @@
 {
-    "pddlParser.executableOrService": "/home/xyz/rosplan_ws/src/ROSPlan/rosplan_dependencies/VAL/parser",
+    "pddlParser.executableOrService": "~/rosplan_ws/src/ROSPlan/rosplan_dependencies/VAL/parser",
     "pddlParser.executableOptions": "$(domain) $(problem)",
-    "pddl.validatorPath": "/home/xyz/rosplan_ws/src/ROSPlan/rosplan_dependencies/VAL/validate",
+    "pddl.validatorPath": "~/rosplan_ws/src/ROSPlan/rosplan_dependencies/VAL/validate",
+    "redhat.telemetry.enabled": false,
+    "python.defaultInterpreterPath": "~/anaconda3/bin/python",
+    "pddl.selectedPlanner": "POPF",
+    "pddl.planners": [
+        {
+            "kind": "popf",
+            "canConfigure": true,
+            "path": "~/rosplan_ws/src/ROSPlan/rosplan_planning_system/common/bin/popf",
+            "syntax": "$(planner) $(options) $(domain) $(problem)",
+            "title": "POPF"
+        }
+    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -33,11 +45,11 @@
     },
     "git.ignoreLimitWarning": true,
     "python.autoComplete.extraPaths": [
-        "/home/xyz/rosplan_ws/devel/lib/python2.7/dist-packages",
+        "~/rosplan_ws/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages"
     ],
     "python.analysis.extraPaths": [
-        "/home/xyz/rosplan_ws/devel/lib/python2.7/dist-packages",
+        "~/rosplan_ws/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages"
     ],
     "files.associations": {
