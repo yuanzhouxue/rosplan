@@ -41,6 +41,7 @@
         "src/ROSPlan/rosplan_dispatch_msgs": true,
         "src/ROSPlan/rosplan_knowledge_msgs": true,
         "src/rosplan_demos": true,
+        "src/tiago": true,
         "**/*.class": true,
     },
     "git.ignoreLimitWarning": true,

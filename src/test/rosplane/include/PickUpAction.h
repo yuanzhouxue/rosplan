@@ -31,6 +31,7 @@
 #include <play_motion_msgs/PlayMotionGoal.h>
 #include <moveit_msgs/MoveItErrorCodes.h>
 #include <control_msgs/QueryTrajectoryState.h>
+#include <control_msgs/JointTrajectoryControllerState.h>
 
 
 using std::string;

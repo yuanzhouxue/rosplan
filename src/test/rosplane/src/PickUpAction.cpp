@@ -11,7 +11,7 @@ using rosplan_knowledge_msgs::KnowledgeUpdateServiceArray;
 namespace KCL_rosplan {
 
     /* constructor */
-    PickUpAction::PickUpAction() : play_m_as("/play_motion"), pick_as("/pickup_pose"), tf_l(tfBuffer){
+    PickUpAction::PickUpAction() : play_m_as("/play_motion"), pick_as("/pickup_pose"), tf_l(tfBuffer) {
         node_name = ros::this_node::getName();
         // create a node handle to manage communication with ROS network
         ros::NodeHandle nh("~");
@@ -76,9 +76,9 @@ namespace KCL_rosplan {
     void PickUpAction::lowerHead() {
         ROS_INFO("(%s): Moving head down...", node_name.c_str());
         trajectory_msgs::JointTrajectory jt;
-        jt.joint_names = {"head_1_joint", "head_2_joint"};
+        jt.joint_names = { "head_1_joint", "head_2_joint" };
         trajectory_msgs::JointTrajectoryPoint jtp;
-        jtp.positions = {0.0, -0.75};
+        jtp.positions = { 0.0, -0.75 };
         jtp.time_from_start = ros::Duration(2.0);
         jt.points.push_back(jtp);
         head_cmd.publish(jt);
@@ -88,9 +88,9 @@ namespace KCL_rosplan {
     void PickUpAction::liftTorso() {
         ROS_INFO("(%s): Moving torso up...", node_name.c_str());
         trajectory_msgs::JointTrajectory jt;
-        jt.joint_names = {"torso_lift_joint"};
+        jt.joint_names = { "torso_lift_joint" };
         trajectory_msgs::JointTrajectoryPoint jtp;
-        jtp.positions = {0.34};
+        jtp.positions = { 0.34 };
         jtp.time_from_start = ros::Duration(2.0);
         jt.points.push_back(jtp);
         head_cmd.publish(jt);
@@ -122,7 +122,8 @@ namespace KCL_rosplan {
                 auto transform = tfBuffer.lookupTransform(string("base_footprint"), newFrameId, time);
                 tf2::doTransform(ps, aruco_ps, transform);
                 transformOK = true;
-            } catch (exception e) {
+            }
+            catch (exception e) {
                 ROS_WARN("(%s): Exception on transforming point... trying again \n(%s)", node_name.c_str(), e.what());
                 ros::Duration(0.01).sleep();
                 ps.header.stamp = ros::Time::now();
@@ -161,7 +162,12 @@ namespace KCL_rosplan {
         //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
         //     return false;
         // }
-
+        auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/gripper_controller/state");
+        ROS_INFO("(%s): actual[0]: %.4f, desired[0]: %.4f, actual[1]: %.4f, desired[1]: %.4f", node_name.c_str(), res->actual.positions[0], res->desired.positions[0], res->actual.positions[1], res->desired.positions[1]);
+        if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
+            ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
+            return false;
+        }
 
         liftTorso();
         ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());

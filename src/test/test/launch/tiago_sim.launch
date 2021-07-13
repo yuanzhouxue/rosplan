@@ -33,9 +33,9 @@
         <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
         <arg name="problem_path" value="$(find test)/pddls/graspProblem.pddl" />
         <!-- automatically generated pddl problem will be created here -->
-        <arg name="autom_gen_problem_path" value="$(find test)/pddls/graspProblem.pddl" />
+        <arg name="autom_gen_problem_path" value="$(find test)/output/graspProblem_autogen.pddl" />
         <!-- planner will produce output plan and write to this location -->
-        <arg name="data_path" value="$(find rosplan_turtlebot3_demo)/common/" />
+        <arg name="data_path" value="$(find test)/output/" />
     </include>
 
 
