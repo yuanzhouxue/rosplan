@@ -18,11 +18,11 @@ find_package(catkin REQUIRED COMPONENTS
     rosplan_knowledge_msgs
     rosplan_planning_system
     actionlib
-    tf2
     tf
+    tf2
+    tf2_ros
     tiago_pick_demo
     play_motion_msgs
-    tf2_ros
     image_transport
     cv_bridge
 )
@@ -153,7 +153,7 @@ include_directories(
 add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
 target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 
-add_executable(pickup_action_node src/PickUpAction.cpp)
+add_executable(pickup_action_node src/PickUpAction.cpp src/RPActionInterface.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
 
 add_executable(observe_action_node src/observe_action.cpp)

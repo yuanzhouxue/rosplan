@@ -11,7 +11,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <cstdlib>
 
-#include "rosplan_action_interface/RPActionInterface.h"
+#include "RPActionInterface.h"
 #include "rosplan_knowledge_msgs/KnowledgeUpdateService.h"
 #include <diagnostic_msgs/KeyValue.h>
 #include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
@@ -40,7 +40,7 @@ using std::vector;
 /**
  * This file defines an action interface created in tutorial 10.
  */
-namespace KCL_rosplan {
+namespace rosplane {
 
     class PickUpAction : public RPActionInterface {
 

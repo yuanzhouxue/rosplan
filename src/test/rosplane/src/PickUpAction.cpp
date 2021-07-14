@@ -8,23 +8,23 @@ using rosplan_knowledge_msgs::KnowledgeUpdateService;
 using rosplan_knowledge_msgs::KnowledgeUpdateServiceArray;
 
 /* The implementation of RPTutorial.h */
-namespace KCL_rosplan {
+namespace rosplane {
 
     /* constructor */
-    PickUpAction::PickUpAction() : play_m_as("/play_motion"), pick_as("/pickup_pose"), tf_l(tfBuffer) {
+    PickUpAction::PickUpAction() : nh_("~"), play_m_as("/play_motion"), pick_as("/pickup_pose"), tf_l(tfBuffer) {
         node_name = ros::this_node::getName();
         // create a node handle to manage communication with ROS network
-        ros::NodeHandle nh("~");
+        // ros::NodeHandle nh("~");
         // get waypoints reference frame from param server
-        nh.param<std::string>("waypoint_frameid", waypoint_frameid_, "map");
-        nh.param<std::string>("wp_namespace", wp_namespace_, "/rosplan_demo_waypoints/wp");
-        nh.param<double>("probility", probility, 1.0);
+        nh_.param<std::string>("waypoint_frameid", waypoint_frameid_, "map");
+        nh_.param<std::string>("wp_namespace", wp_namespace_, "/rosplan_demo_waypoints/wp");
+        nh_.param<double>("probility", probility, 1.0);
         // ROS_INFO("Simulated movebase with probility %lf", probility);
         // setup a move base clear costmap client (to be able to send clear costmap requests later on)
-        clear_costmaps_client_ = nh.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");
-        update_knowledge_client_ = nh.serviceClient<KnowledgeUpdateService>("/rosplan_knowledge_base/update");
-        update_knowledge_array_client_ = nh.serviceClient<KnowledgeUpdateServiceArray>("/rosplan_knowledge_base/update_array");
-        query_knowledge_client_ = nh.serviceClient<GetInstanceService>("/rosplan_knowledge_base/state/instances");
+        clear_costmaps_client_ = nh_.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");
+        update_knowledge_client_ = nh_.serviceClient<KnowledgeUpdateService>("/rosplan_knowledge_base/update");
+        update_knowledge_array_client_ = nh_.serviceClient<KnowledgeUpdateServiceArray>("/rosplan_knowledge_base/update_array");
+        query_knowledge_client_ = nh_.serviceClient<GetInstanceService>("/rosplan_knowledge_base/state/instances");
         ROS_INFO("(%s): Initalizing...", node_name.c_str());
         // auto tfBuffer = tf2_ros::Buffer();
         // tf2_ros::TransformListener tf_l(tfBuffer);
@@ -35,9 +35,9 @@ namespace KCL_rosplan {
         }
 
         ROS_INFO("(%s): Setting publishers to torso and head controller...", node_name.c_str());
-        torso_cmd = nh.advertise<trajectory_msgs::JointTrajectory>("/torso_controller/command", 1);
-        head_cmd = nh.advertise<trajectory_msgs::JointTrajectory>("/head_controller/command", 1);
-        detected_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("/detected_aruco_pose", 1, true);
+        torso_cmd = nh_.advertise<trajectory_msgs::JointTrajectory>("/torso_controller/command", 1);
+        head_cmd = nh_.advertise<trajectory_msgs::JointTrajectory>("/head_controller/command", 1);
+        detected_pos_pub = nh_.advertise<geometry_msgs::PoseStamped>("/detected_aruco_pose", 1, true);
 
         ROS_INFO("(%s): Waiting for '/play_motion' AS...", node_name.c_str());
         if (!play_m_as.waitForServer(ros::Duration(20))) {
@@ -48,7 +48,7 @@ namespace KCL_rosplan {
         ROS_INFO("(%s): Connected!", node_name.c_str());
         ROS_INFO("(%s): Ready to receive.", node_name.c_str());
 
-        service = nh.advertiseService("my_pick_service", &PickUpAction::callback, this);
+        service = nh_.advertiseService("my_pick_service", &PickUpAction::callback, this);
     }
 
     bool PickUpAction::callback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res) {
@@ -164,10 +164,13 @@ namespace KCL_rosplan {
         // }
         auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/gripper_controller/state");
         ROS_INFO("(%s): actual[0]: %.4f, desired[0]: %.4f, actual[1]: %.4f, desired[1]: %.4f", node_name.c_str(), res->actual.positions[0], res->desired.positions[0], res->actual.positions[1], res->desired.positions[1]);
-        if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
-            ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
-            return false;
-        }
+        // if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
+        //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
+        //     ros::ServiceClient _plan_dispatch_cancel_client = nh_.serviceClient<std_srvs::Empty>("/rosplan_plan_dispatcher/cancel_dispatch");
+        //     std_srvs::Empty empty;
+        //     _plan_dispatch_cancel_client.call(empty);
+        //     return false;
+        // }
 
         liftTorso();
         ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());
@@ -194,7 +197,7 @@ int main(int argc, char** argv) {
     // std::string actionserver;
     // nh.param("action_server", actionserver, std::string("/move_base"));
     // create PDDL action subscriber
-    KCL_rosplan::PickUpAction rpti;
+    rosplane::PickUpAction rpti;
 
     rpti.runActionInterface();
 

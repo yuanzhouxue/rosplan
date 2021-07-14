@@ -58,9 +58,9 @@
         <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
     </node> -->
 
-    <!-- <include file="$(find rosplane)/launch/tiago_pick.launch" >
+    <include file="$(find rosplane)/launch/tiago_pick.launch" >
         <arg name="pddl_action_name" value="grasp"/>
-    </include> -->
+    </include>
 
     <node name="observe_action_interface" pkg="rosplane" type="observe_action_node" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
