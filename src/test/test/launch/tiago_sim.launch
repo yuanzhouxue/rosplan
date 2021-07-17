@@ -69,6 +69,8 @@
         <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
     </node>
 
+    <node name="look_around_interface" pkg="rosplane" type="look_around_node" output="screen">
+    </node>
     <!-- visualisation of robot sensor data -->
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosplan_turtlebot3_demo)/config/turtlebot3.rviz" if="$(arg show_rviz)" /> -->
     <group if="$(arg show_rviz)">

@@ -25,6 +25,8 @@ find_package(catkin REQUIRED COMPONENTS
     play_motion_msgs
     image_transport
     cv_bridge
+    aruco
+    aruco_msgs
 )
 
 find_package(OpenCV REQUIRED COMPONENTS
@@ -156,11 +158,14 @@ target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 add_executable(pickup_action_node src/PickUpAction.cpp src/RPActionInterface.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
 
-add_executable(observe_action_node src/observe_action.cpp)
+add_executable(observe_action_node src/observe_action.cpp src/RPActionInterface.cpp)
 target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(rosplane_monitor_node src/RosplanEMonitor.cpp)
 target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})
+
+add_executable(look_around_node src/look_around.cpp)
+target_link_libraries(look_around_node ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

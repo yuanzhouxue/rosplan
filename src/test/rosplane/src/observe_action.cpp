@@ -1,6 +1,6 @@
 #include "observe_action.h"
 
-namespace KCL_rosplan {
+namespace rosplane {
 
     RPObserveAction::RPObserveAction() {
         ros::NodeHandle nh("~");
@@ -60,7 +60,7 @@ namespace KCL_rosplan {
                 transform_ok = true;
             }
             catch (const std::exception& e) {
-                std::cerr << e.what() << '\n';
+                // std::cerr << e.what() << '\n';
             }
         }
         head_action_goal.goal.target.point.x = transform.getOrigin().x();
@@ -68,47 +68,55 @@ namespace KCL_rosplan {
         head_action_goal.goal.target.point.z = transform.getOrigin().z();
         pub_head_topic.publish(head_action_goal);
 
+
+        
         // rotate wrist test
         // get the arms' position
         auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/arm_controller/state");
         
+        // 
 
         // first position
         arm_action_goal.points.resize(2);
         arm_action_goal.points[0].positions.resize(7);
         arm_action_goal.points[0].positions[0] = res->actual.positions[0];
-        arm_action_goal.points[0].positions[1] = res->actual.positions[1];
-        arm_action_goal.points[0].positions[2] = res->actual.positions[2];
-        arm_action_goal.points[0].positions[3] = res->actual.positions[3];
-        arm_action_goal.points[0].positions[4] = res->actual.positions[4];
-        arm_action_goal.points[0].positions[5] = res->actual.positions[5];
-        arm_action_goal.points[0].positions[6] = -2.0;
+        arm_action_goal.points[0].positions[1] = -0.21;
+        arm_action_goal.points[0].positions[2] = -2.20;
+        arm_action_goal.points[0].positions[3] = 1.16;
+        arm_action_goal.points[0].positions[4] = -0.71;
+        arm_action_goal.points[0].positions[5] = 1.11;
+        arm_action_goal.points[0].positions[6] = 2.0;
         arm_action_goal.points[0].velocities.resize(7);
         for (int i = 0; i < 7; i++) {
             arm_action_goal.points[0].velocities[i] = 0.0;
         }
 
-        arm_action_goal.points[0].time_from_start = ros::Duration(2.0);
+        arm_action_goal.points[0].time_from_start = ros::Duration(4.0);
 
         // second position
         arm_action_goal.points[1].positions.resize(7);
         arm_action_goal.points[1].positions[0] = res->actual.positions[0];
-        arm_action_goal.points[1].positions[1] = res->actual.positions[1];
-        arm_action_goal.points[1].positions[2] = res->actual.positions[2];
-        arm_action_goal.points[1].positions[3] = res->actual.positions[3];
-        arm_action_goal.points[1].positions[4] = res->actual.positions[4];
-        arm_action_goal.points[1].positions[5] = res->actual.positions[5];
-        arm_action_goal.points[1].positions[6] = 2.0;
+        arm_action_goal.points[1].positions[1] = -0.21;
+        arm_action_goal.points[1].positions[2] = -2.20;
+        arm_action_goal.points[1].positions[3] = 1.16;
+        arm_action_goal.points[1].positions[4] = -0.71;
+        arm_action_goal.points[1].positions[5] = 1.11;
+        arm_action_goal.points[1].positions[6] = -2.0;
         arm_action_goal.points[1].velocities.resize(7);
         for (int i = 0; i < 7; i++) {
             arm_action_goal.points[1].velocities[i] = 0.0;
         }
 
-        arm_action_goal.points[1].time_from_start = ros::Duration(4.0);
-
-        arm_action_goal.header.stamp = ros::Time::now() + ros::Duration(4.0);
-
+        arm_action_goal.points[1].time_from_start = ros::Duration(8.0);
+        arm_action_goal.header.stamp = ros::Time::now() + ros::Duration(8.0);
         pub_arm_topic.publish(arm_action_goal);
+
+        auto observe_res = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
+        if (observe_res != nullptr){
+            return false;
+        }
+        
+        
         return true;
     }
 }
@@ -116,7 +124,7 @@ namespace KCL_rosplan {
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "observe_action_interface");
-    KCL_rosplan::RPObserveAction oa;
+    rosplane::RPObserveAction oa;
     oa.runActionInterface();
     return 0;
 }

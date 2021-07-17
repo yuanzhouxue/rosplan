@@ -8,16 +8,19 @@
 #include <tf/transform_listener.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/buffer_core.h>
-#include <rosplan_action_interface/RPActionInterface.h>
+#include <RPActionInterface.h>
 #include <std_srvs/Empty.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
+
+// aruco header
+#include <aruco/aruco.h>
 
 // opencv header
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 
-namespace KCL_rosplan {
+namespace rosplane {
     class RPObserveAction : public RPActionInterface {
     public:
         RPObserveAction();
