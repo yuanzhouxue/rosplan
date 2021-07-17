@@ -74,15 +74,20 @@ namespace rosplane {
     }
 
     void PickUpAction::lowerHead() {
-        ROS_INFO("(%s): Moving head down...", node_name.c_str());
-        trajectory_msgs::JointTrajectory jt;
-        jt.joint_names = { "head_1_joint", "head_2_joint" };
-        trajectory_msgs::JointTrajectoryPoint jtp;
-        jtp.positions = { 0.0, -0.75 };
-        jtp.time_from_start = ros::Duration(2.0);
-        jt.points.push_back(jtp);
-        head_cmd.publish(jt);
-        ROS_INFO("(%s): Lower head done.", node_name.c_str());
+        // ROS_INFO("(%s): Moving head down...", node_name.c_str());
+        // trajectory_msgs::JointTrajectory jt;
+        // jt.joint_names = { "head_1_joint", "head_2_joint" };
+        // trajectory_msgs::JointTrajectoryPoint jtp;
+        // jtp.positions = { 0.0, -0.75 };
+        // jtp.time_from_start = ros::Duration(2.0);
+        // jt.points.push_back(jtp);
+        // head_cmd.publish(jt);
+        // ROS_INFO("(%s): Lower head done.", node_name.c_str());
+        ROS_INFO("(%s): Looking for aruco...", node_name.c_str());
+        ros::ServiceClient look_around_client = nh_.serviceClient<std_srvs::Empty>("/look_around_interface/tiago_look_around");
+        std_srvs::Empty e;
+        look_around_client.call(e);
+        ROS_INFO("(%s): Done.", node_name.c_str());
     }
 
     void PickUpAction::liftTorso() {
@@ -100,10 +105,10 @@ namespace rosplane {
 
     /* action dispatch callback */
     bool PickUpAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-        if (!robot_prepared) {
+        // if (!robot_prepared) {
             prepareRobot();
-            robot_prepared = true;
-        }
+            // robot_prepared = true;
+        // }
 
         ROS_INFO("(%s): spherical_grasp_gui: Waiting for an aruco detection", node_name.c_str());
         auto aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");

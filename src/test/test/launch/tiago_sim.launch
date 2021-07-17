@@ -12,6 +12,8 @@
     <!-- <arg name="gzclient" default="true" /> -->
     <arg name="recording" default="false" />
 
+    <arg name="use_moveit_camera" default="false"/>
+
     <env name="LC_NUMERIC" value="C" />
 
     <!-- Gazebo simulation -->
@@ -21,6 +23,8 @@
         <arg name="world" value="tabletop_cube" />
         <arg name="gui" value="$(arg gazebo_gui)" />
         <arg name="recording" value="$(arg recording)" />
+        <arg name="use_moveit_camera" value="$(arg use_moveit_camera)"/>
+        <arg name="tuck_arm" default="true"/>
     </include>
 
     <!-- roadmap (random waypoint generation) -->

@@ -50,6 +50,8 @@ namespace rosplane {
         control_msgs::PointHeadActionGoal head_action_goal;
         trajectory_msgs::JointTrajectory arm_action_goal;
 
+        ros::ServiceClient update_knowledge_array_client_;
+
     };
 }
 

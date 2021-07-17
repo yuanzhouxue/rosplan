@@ -1,7 +1,7 @@
 <launch>
     <arg name="domain_path" default="$(find test)/pddls/graspDomain.pddl" />
     <arg name="problem_path" default="$(find test)/pddls/graspProblem.pddl" />
-    <arg name="autom_gen_problem_path" default="$(find test)/pddls/graspProblem.pddl" />
+    <arg name="autom_gen_problem_path" default="$(find test)/output/graspProblem.pddl" />
     <arg name="data_path" default="$(find rosplan_turtlebot3_demo)/common/" />
     <!-- ROSPlan -->
     <include file="$(find rosplan_planning_system)/launch/interfaced_planning_system.launch">

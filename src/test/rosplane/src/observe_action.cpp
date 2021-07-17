@@ -1,4 +1,13 @@
 #include "observe_action.h"
+#include <diagnostic_msgs/KeyValue.h>
+#include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
+#include "rosplan_knowledge_msgs/GetInstanceService.h"
+
+using namespace std;
+using rosplan_knowledge_msgs::GetInstanceService;
+using rosplan_knowledge_msgs::KnowledgeItem;
+using rosplan_knowledge_msgs::KnowledgeUpdateService;
+using rosplan_knowledge_msgs::KnowledgeUpdateServiceArray;
 
 namespace rosplane {
 
@@ -26,6 +35,8 @@ namespace rosplane {
         arm_action_goal.joint_names.push_back("arm_5_joint");
         arm_action_goal.joint_names.push_back("arm_6_joint");
         arm_action_goal.joint_names.push_back("arm_7_joint");
+
+        update_knowledge_array_client_ = nh.serviceClient<KnowledgeUpdateServiceArray>("/rosplan_knowledge_base/update_array");
     }
 
     bool RPObserveAction::serviceCallback(std_srvs::EmptyRequest& req, std_srvs::EmptyResponse& res) {
@@ -67,13 +78,16 @@ namespace rosplane {
         head_action_goal.goal.target.point.y = transform.getOrigin().y();
         head_action_goal.goal.target.point.z = transform.getOrigin().z();
         pub_head_topic.publish(head_action_goal);
+        // TODO: 要实现先转头再转手，否则可能会先看到二维码
+        // 但是sleep好像会阻塞住整个ros（不一定）
+        ros::Duration(3.0).sleep();
 
 
-        
+
         // rotate wrist test
         // get the arms' position
         auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/arm_controller/state");
-        
+
         // 
 
         // first position
@@ -108,16 +122,35 @@ namespace rosplane {
         }
 
         arm_action_goal.points[1].time_from_start = ros::Duration(8.0);
-        arm_action_goal.header.stamp = ros::Time::now() + ros::Duration(8.0);
+        arm_action_goal.header.stamp = ros::Time::now();
         pub_arm_topic.publish(arm_action_goal);
 
-        auto observe_res = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
-        if (observe_res != nullptr){
-            return false;
+        auto observe_res = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose", ros::Duration(8.0));
+        // ROS_ERROR("Where is bug");
+        auto now = ros::Time::now();
+        if (observe_res != nullptr && now - observe_res->header.stamp < ros::Duration(2.0)) {
+            ROS_INFO("%d, %d", observe_res->header.stamp.nsec, observe_res->header.stamp.sec);
+            ROS_INFO("%d, %d", now.nsec, now.sec);
+            return true;
         }
-        
-        
-        return true;
+
+        // 删除前一个动作的效果
+        ROS_INFO("Observe action: (%s) failed", params.name.c_str());
+
+        // add this wp to KB
+        KnowledgeItem observe_item;
+        observe_item.knowledge_type = KnowledgeItem::FACT;
+        observe_item.initial_time = ros::Time(0, 0);
+        observe_item.attribute_name = "observe";
+
+        vector<KnowledgeItem> to_be_updated = { observe_item };
+
+        KnowledgeUpdateServiceArray srv;
+        srv.request.update_type = vector<uint8_t>(to_be_updated.size(), KnowledgeUpdateServiceArray::Request::REMOVE_KNOWLEDGE);
+        srv.request.knowledge = move(to_be_updated);
+
+        update_knowledge_array_client_.call(srv);
+        return false;
     }
 }
 
