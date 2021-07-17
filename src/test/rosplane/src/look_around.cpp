@@ -62,20 +62,23 @@ namespace rosplane {
             // subscibe head pose
             try {
                 ROS_INFO("%s", look_around_res->header.frame_id.c_str());
-                look_around_res->pose.position
-                listener.waitForTransform("/base_link", look_around_res->header.frame_id, ros::Time::now(), ros::Duration(1.0));
-                listener.lookupTransform("/base_link", look_around_res->header.frame_id, ros::Time::now(), transform);
+
+                // listener.waitForTransform("/base_link", look_around_res->header.frame_id, ros::Time::now(), ros::Duration(1.0));
+                // listener.lookupTransform("/base_link", look_around_res->header.frame_id, ros::Time::now(), transform);
 
                 
-                after_look_around_goal.header.frame_id = "/base_link";
+                after_look_around_goal.header.frame_id = "/base_footprint";
                 after_look_around_goal.goal.max_velocity = 1.0;
                 after_look_around_goal.goal.min_duration = ros::Duration(1.0);
-                after_look_around_goal.goal.target.header.frame_id = "/base_link";
+                after_look_around_goal.goal.target.header.frame_id = "/base_footprint";
                 after_look_around_goal.goal.pointing_axis.x = 1.0;
                 after_look_around_goal.goal.pointing_frame = "/head_2_link";
-                after_look_around_goal.goal.target.point.x = transform.getOrigin().x();
-                after_look_around_goal.goal.target.point.y = transform.getOrigin().y();
-                after_look_around_goal.goal.target.point.z = transform.getOrigin().z();
+                // after_look_around_goal.goal.target.point.x = transform.getOrigin().x();
+                // after_look_around_goal.goal.target.point.y = transform.getOrigin().y();
+                // after_look_around_goal.goal.target.point.z = transform.getOrigin().z();
+                after_look_around_goal.goal.target.point.x = look_around_res->pose.position.x;
+                after_look_around_goal.goal.target.point.y = look_around_res->pose.position.y;
+                after_look_around_goal.goal.target.point.z = look_around_res->pose.position.z;
                 pub_look_around_topic.publish(after_look_around_goal);
                 return true;
             }
