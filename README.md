@@ -24,12 +24,6 @@ cd rosplan_ws
 ./init.bash
 ```
 
-安装一些ROS依赖包
-
-```bash
-./install_dependencies.bash
-```
-
 编译工作空间
 
 ```bash
