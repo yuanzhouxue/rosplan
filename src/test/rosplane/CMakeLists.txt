@@ -27,6 +27,8 @@ find_package(catkin REQUIRED COMPONENTS
     cv_bridge
     aruco
     aruco_msgs
+    genmsg
+    message_generation
 )
 
 find_package(OpenCV REQUIRED COMPONENTS
@@ -73,11 +75,12 @@ find_package(OpenCV REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  PlanByPDDL.srv
+  ParsingStringSimple.srv
+  ParsingStringEsterel.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -87,10 +90,13 @@ find_package(OpenCV REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  rosplan_dispatch_msgs
+  diagnostic_msgs
+  # Or other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -121,11 +127,14 @@ find_package(OpenCV REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
+# catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rosplane
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
+# )
+catkin_package(
+  CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs 
 )
 
 ###########
@@ -166,6 +175,18 @@ target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})
 
 add_executable(look_around_node src/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
+
+add_executable(popf_planner_interface src/PlannerInterface/POPFPlannerInterface.cpp src/PlannerInterface/PlannerInterface.cpp)
+add_dependencies(popf_planner_interface ${catkin_EXPORTED_TARGETS})
+target_link_libraries(popf_planner_interface ${catkin_LIBRARIES})
+
+add_executable(pddl_simple_plan_parser src/PlanParsing/PDDLSimplePlanParser.cpp src/PlanParsing/PlanParser.cpp)
+add_dependencies(pddl_simple_plan_parser ${catkin_EXPORTED_TARGETS})
+target_link_libraries(pddl_simple_plan_parser ${catkin_LIBRARIES})
+
+add_executable(pddl_esterel_plan_parser src/PlanParsing/PDDLEsterelPlanParser.cpp src/PlanParsing/PlanParser.cpp)
+add_dependencies(pddl_esterel_plan_parser ${catkin_EXPORTED_TARGETS})
+target_link_libraries(pddl_esterel_plan_parser ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
