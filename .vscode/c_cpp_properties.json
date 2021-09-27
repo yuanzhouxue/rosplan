@@ -58,6 +58,7 @@
                 "~/rosplan_ws/src/tiago/ros_control/transmission_interface/include/**",
                 "~/rosplan_ws/src/tiago/ros_controllers/velocity_controllers/include/**",
                 "~/rosplan_ws/src/test/xyz_nav/include/**",
+                "~/rosplan_ws/src/test/test/include/**",
                 "/usr/include/**"
             ],
             "name": "ROS"

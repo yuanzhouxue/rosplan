@@ -68,11 +68,10 @@ find_package(OpenCV REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  SensorDispatch.msg
+)
 
 ## Generate services in the 'srv' folder
 add_service_files(
@@ -94,6 +93,7 @@ generate_messages(
   DEPENDENCIES
   std_msgs
   rosplan_dispatch_msgs
+  rosplan_knowledge_msgs
   diagnostic_msgs
   # Or other packages containing msgs
 )
@@ -134,7 +134,8 @@ generate_messages(
 #  DEPENDS system_lib
 # )
 catkin_package(
-  CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs 
+    INCLUDE_DIRS include
+    CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs rosplan_dispatch_msgs rosplan_knowledge_msgs
 )
 
 ###########
@@ -176,17 +177,18 @@ target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})
 add_executable(look_around_node src/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
 
-add_executable(popf_planner_interface src/PlannerInterface/POPFPlannerInterface.cpp src/PlannerInterface/PlannerInterface.cpp)
-add_dependencies(popf_planner_interface ${catkin_EXPORTED_TARGETS})
-target_link_libraries(popf_planner_interface ${catkin_LIBRARIES})
+add_executable(rosplane_popf_planner_interface src/PlannerInterface/POPFPlannerInterface.cpp src/PlannerInterface/PlannerInterface.cpp)
+# 添加rosplane_generate_messages_cpp防止找不到srv头文件
+add_dependencies(rosplane_popf_planner_interface rosplane_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rosplane_popf_planner_interface ${catkin_LIBRARIES})
 
-add_executable(pddl_simple_plan_parser src/PlanParsing/PDDLSimplePlanParser.cpp src/PlanParsing/PlanParser.cpp)
-add_dependencies(pddl_simple_plan_parser ${catkin_EXPORTED_TARGETS})
-target_link_libraries(pddl_simple_plan_parser ${catkin_LIBRARIES})
+add_executable(rosplane_pddl_simple_plan_parser src/PlanParsing/PDDLSimplePlanParser.cpp src/PlanParsing/PlanParser.cpp)
+add_dependencies(rosplane_pddl_simple_plan_parser rosplane_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rosplane_pddl_simple_plan_parser ${catkin_LIBRARIES})
 
-add_executable(pddl_esterel_plan_parser src/PlanParsing/PDDLEsterelPlanParser.cpp src/PlanParsing/PlanParser.cpp)
-add_dependencies(pddl_esterel_plan_parser ${catkin_EXPORTED_TARGETS})
-target_link_libraries(pddl_esterel_plan_parser ${catkin_LIBRARIES})
+add_executable(rosplane_pddl_esterel_plan_parser src/PlanParsing/PDDLEsterelPlanParser.cpp src/PlanParsing/PlanParser.cpp)
+add_dependencies(rosplane_pddl_esterel_plan_parser rosplane_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rosplane_pddl_esterel_plan_parser ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -202,6 +204,9 @@ target_link_libraries(pddl_esterel_plan_parser ${catkin_LIBRARIES})
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+add_library(rosplane_sensor_interface src/SensorInterface/SensorInterface.cpp)
+add_dependencies(rosplane_sensor_interface ${catkin_EXPORTED_TARGETS})
 
 #############
 ## Install ##
@@ -240,6 +245,11 @@ install(TARGETS simulated_movebase_node
 # install(DIRECTORY include/${PROJECT_NAME}/
 #   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 #   FILES_MATCHING PATTERN "*.h"
+#   PATTERN ".svn" EXCLUDE
+# )
+
+# install(DIRECTORY include/rosplan_action_interface
+#   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
 #   PATTERN ".svn" EXCLUDE
 # )
 
