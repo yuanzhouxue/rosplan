@@ -10,7 +10,7 @@
 	<arg name="problem_path"         default="$(find rosplan_planning_system)/test/pddl/turtlebot/problem.pddl" />
 	<arg name="data_path"            default="$(find rosplan_planning_system)/test/pddl/turtlebot/" />
 	<arg name="planner_command"      default="timeout 10 $(find rosplan_planning_system)/common/bin/popf DOMAIN PROBLEM" />
-	<arg name="planner_interface"    default="popf_planner_interface" />
+	<arg name="planner_interface"    default="rosplane_popf_planner_interface" />
 	<!-- planner interface -->
 	<node name="$(arg node_name)" pkg="rosplane" type="$(arg planner_interface)" respawn="false" output="screen">
 

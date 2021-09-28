@@ -10,6 +10,8 @@
 #include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
 #include "rosplan_knowledge_msgs/GetDomainOperatorDetailsService.h"
 #include "rosplan_knowledge_msgs/GetDomainPredicateDetailsService.h"
+#include "rosplane/SensorDispatch.h"
+#include "rosplane/SensorFeedback.h"
 #include "diagnostic_msgs/KeyValue.h"
 
 #ifndef rosplane_sensor_interface
@@ -24,37 +26,32 @@
 namespace rosplane {
 
     class SensorInterface {
-
+        
     protected:
 
-        std::map<std::string, rosplan_knowledge_msgs::DomainFormula> predicates;
-        std::map<std::string, rosplan_knowledge_msgs::DomainFormula> sensed_predicates;
+        std::string pred_name;
 
-        /* PDDL info and publisher */
-        rosplan_knowledge_msgs::DomainFormula params;
-        rosplan_knowledge_msgs::DomainOperator op;
         ros::Publisher pddl_action_parameters_pub;
 
         /* action feedback to planning system */
-        ros::Publisher action_feedback_pub;
+        ros::Publisher sensor_feedback_pub;
 
         /* service handle to PDDL knowledge base */
         ros::ServiceClient update_knowledge_client;
 
-        /* action status */
-        bool action_success;
-        bool action_cancelled;
+        /* pred status */
+        bool pred_hold;
 
     public:
 
         /* main loop for action interface */
-        void runActionInterface();
+        void runSensorInterface();
 
         /* listen to and process action_dispatch topic */
-        void dispatchCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg);
+        void dispatchCallback(const rosplane::SensorDispatch::ConstPtr& msg);
 
         /* perform or call real action implementation */
-        virtual bool concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) = 0;
+        virtual bool concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg) = 0;
     };
 }
 #endif

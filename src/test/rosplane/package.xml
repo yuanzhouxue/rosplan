@@ -55,7 +55,6 @@
     <build_depend>rosplan_planning_system</build_depend>
     <build_depend>rosplan_knowledge_base</build_depend>
     <build_depend>rosplan_sensing_interface</build_depend>
-    <build_depend>tiago_pick_demo</build_depend>
     <depend>message_generation</depend>
     <depend>message_runtime</depend>
     <depend>roscpp</depend>

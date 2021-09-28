@@ -13,26 +13,14 @@ find_package(catkin REQUIRED COMPONENTS
     std_srvs
     diagnostic_msgs
     geometry_msgs
-    move_base_msgs
     rosplan_dispatch_msgs
     rosplan_knowledge_msgs
     rosplan_planning_system
     actionlib
-    tf
-    tf2
-    tf2_ros
-    tiago_pick_demo
-    play_motion_msgs
-    image_transport
-    cv_bridge
-    aruco
-    aruco_msgs
     genmsg
     message_generation
 )
 
-find_package(OpenCV REQUIRED COMPONENTS
-    opencv_highgui)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -71,6 +59,7 @@ find_package(OpenCV REQUIRED COMPONENTS
 add_message_files(
   FILES
   SensorDispatch.msg
+  SensorFeedback.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -133,8 +122,13 @@ generate_messages(
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 # )
+
 catkin_package(
+    # 导出Include目录
     INCLUDE_DIRS include
+    # 在这里将SensorInterface和ActionInterface导出，以供其他ROS包中的节点使用
+    LIBRARIES rosplane_sensor_interface rosplane_action_interface
+
     CATKIN_DEPENDS message_generation message_runtime roscpp rospy std_msgs rosplan_dispatch_msgs rosplan_knowledge_msgs
 )
 
@@ -162,20 +156,9 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
-target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
-
-add_executable(pickup_action_node src/PickUpAction.cpp src/RPActionInterface.cpp)
-target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
-
-add_executable(observe_action_node src/observe_action.cpp src/RPActionInterface.cpp)
-target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(rosplane_monitor_node src/RosplanEMonitor.cpp)
 target_link_libraries(rosplane_monitor_node ${catkin_LIBRARIES})
-
-add_executable(look_around_node src/look_around.cpp)
-target_link_libraries(look_around_node ${catkin_LIBRARIES})
 
 add_executable(rosplane_popf_planner_interface src/PlannerInterface/POPFPlannerInterface.cpp src/PlannerInterface/PlannerInterface.cpp)
 # 添加rosplane_generate_messages_cpp防止找不到srv头文件
@@ -205,17 +188,16 @@ target_link_libraries(rosplane_pddl_esterel_plan_parser ${catkin_LIBRARIES})
 #   ${catkin_LIBRARIES}
 # )
 
+# 添加两个库，供其他包引用
 add_library(rosplane_sensor_interface src/SensorInterface/SensorInterface.cpp)
-add_dependencies(rosplane_sensor_interface ${catkin_EXPORTED_TARGETS})
+add_dependencies(rosplane_sensor_interface rosplane_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+
+add_library(rosplane_action_interface src/RPActionInterface.cpp)
+add_dependencies(rosplane_action_interface rosplane_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 #############
 ## Install ##
 #############
-install(TARGETS simulated_movebase_node
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html

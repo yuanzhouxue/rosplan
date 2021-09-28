@@ -12,7 +12,7 @@
     <!-- command to run the planner -->
     <arg name="planner_command" default="timeout 10 $(find rosplan_planning_system)/common/bin/popf DOMAIN PROBLEM" />
     <!-- interface to the planning system -->
-    <arg name="planner_interface" default="popf_planner_interface" />
+    <arg name="planner_interface" default="rosplane_popf_planner_interface" />
 
     <!-- knowledge base -->
     <node name="rosplan_knowledge_base" pkg="rosplan_knowledge_base" type="knowledgeBase" respawn="false" output="screen">
@@ -59,5 +59,5 @@
     </include>
 
     <!-- replan monitor -->
-    <node name="rosplane_monitor_node" pkg="rosplane" type="rosplane_monitor_node" />
+    <!-- <node name="rosplane_monitor_node" pkg="rosplane" type="rosplane_monitor_node" /> -->
 </launch>

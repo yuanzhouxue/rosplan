@@ -8,9 +8,22 @@ project(test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-    roscpp
     rosplane
+    rosplan_planning_system
+    aruco
+    aruco_msgs
+    tiago_pick_demo
+    play_motion_msgs
+    tf
+    tf2
+    tf2_ros
+    image_transport
+    cv_bridge
+    move_base_msgs
 )
+
+find_package(OpenCV REQUIRED COMPONENTS
+    opencv_highgui)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -134,6 +147,21 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(dummysensor_node src/DummySensorInterface.cpp)
 target_link_libraries(dummysensor_node ${catkin_LIBRARIES})
+add_executable(dummyaction_node src/DummyActionInterface.cpp)
+target_link_libraries(dummyaction_node ${catkin_LIBRARIES})
+
+add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
+target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
+
+add_executable(pickup_action_node src/PickUpAction.cpp)
+target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
+
+add_executable(observe_action_node src/observe_action.cpp)
+target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(look_around_node src/look_around.cpp)
+target_link_libraries(look_around_node ${catkin_LIBRARIES})
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
