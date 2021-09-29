@@ -162,6 +162,8 @@ target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES
 add_executable(look_around_node src/ActionInterface/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
 
+add_executable(inhand_predicate_observation src/SensorInterface/InhandPredicateObservation.cpp)
+target_link_libraries(inhand_predicate_observation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
