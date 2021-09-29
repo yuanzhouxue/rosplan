@@ -1,19 +1,21 @@
 (define (problem task)
 (:domain graspdomain)
 (:objects
-    c - cup
-    d - desk
+    g - glass
+    t - table
+    r - robot
+    wp0 - waypoint
 )
 (:init
 
-    (not_inhand c)
-
-    (ondesk d c)
+    (on_table g t)
+    (emptyhand r)
 
 
 
 )
 (:goal (and
-    (inhand c)
+    (in_hand g r)
+    (robot_at wp0 r)
 ))
 )

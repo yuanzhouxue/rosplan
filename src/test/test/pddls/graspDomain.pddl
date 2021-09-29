@@ -6,19 +6,20 @@
 (:requirements :strips :fluents :durative-actions :timed-initial-literals :typing :conditional-effects :negative-preconditions :duration-inequalities :equality)
 
 (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
-    cup
-    desk
+    robot
+    glass
+    table
+    waypoint
 )
 
 ; un-comment following line if constants are needed
 ;(:constants )
 
 (:predicates ;todo: define predicates here
-    (inhand ?c - cup)
-    (not_inhand ?c - cup)
-    (ondesk ?d - desk ?c - cup)
-    (observe)
-    (finish_observe)
+    (in_hand ?g - glass ?r - robot)
+    (emptyhand ?r - robot)
+    (on_table ?g - glass ?t - table)
+    (robot_at ?wp - waypoint ?r - robot)
 )
 
 
@@ -27,46 +28,27 @@
 
 ;define actions here
 (:durative-action grasp
-    :parameters (?c - cup ?d - desk)
+    :parameters (?g - glass ?t - table ?r - robot)
     :duration (= ?duration 60)
     :condition (and 
-        ; (at start (finish_observe))
-        (at start (not_inhand ?c))
-        (at start (ondesk ?d ?c))
-        
+        (at start (on_table ?g ?t))
+        (at start (emptyhand ?r))
     )
     :effect (and 
-        (at start (not (finish_observe)))
-        (at end (observe))
-
+        (at end (in_hand ?g ?r))
+        (at end (not (emptyhand ?r)))
+        (at end (not (on_table ?g ?t)))
     )
 )
 
-(:durative-action observing
-    :parameters (?c - cup)
-    :duration (= ?duration 60)
+(:durative-action goto_waypoint
+    :parameters (?wp - waypoint ?g - glass ?r - robot)
+    :duration (= ?duration 20)
     :condition (and 
-        (at start (observe))
-        
+        (over all  (in_hand ?g ?r))
     )
     :effect (and 
-        (at end (not (observe)))
-        (at end (finish_observe))
+        (at end (robot_at ?wp ?r))
     )
 )
-
-(:durative-action then_action
-    :parameters (?c - cup ?d - desk)
-    :duration (= ?duration 60)
-    :condition (and 
-        (at start (finish_observe))
-    )
-    :effect (and 
-        (at end (inhand ?c))
-        (at end (not (not_inhand ?c)))
-        (at end (not (ondesk ?d ?c)))
-        (at start (not (finish_observe)))
-    )
-)
-
 )
