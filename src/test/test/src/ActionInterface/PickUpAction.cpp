@@ -74,15 +74,15 @@ namespace rosplane {
     }
 
     void PickUpAction::lowerHead() {
-        // ROS_INFO("(%s): Moving head down...", node_name.c_str());
-        // trajectory_msgs::JointTrajectory jt;
-        // jt.joint_names = { "head_1_joint", "head_2_joint" };
-        // trajectory_msgs::JointTrajectoryPoint jtp;
-        // jtp.positions = { 0.0, -0.75 };
-        // jtp.time_from_start = ros::Duration(2.0);
-        // jt.points.push_back(jtp);
-        // head_cmd.publish(jt);
-        // ROS_INFO("(%s): Lower head done.", node_name.c_str());
+        ROS_INFO("(%s): Moving head down...", node_name.c_str());
+        trajectory_msgs::JointTrajectory jt;
+        jt.joint_names = { "head_1_joint", "head_2_joint" };
+        trajectory_msgs::JointTrajectoryPoint jtp;
+        jtp.positions = { 0.0, -0.75 };
+        jtp.time_from_start = ros::Duration(2.0);
+        jt.points.push_back(jtp);
+        head_cmd.publish(jt);
+        ROS_INFO("(%s): Lower head done.", node_name.c_str());
         ROS_INFO("(%s): Looking for aruco...", node_name.c_str());
         ros::ServiceClient look_around_client = nh_.serviceClient<std_srvs::Empty>("/look_around_interface/tiago_look_around");
         std_srvs::Empty e;
