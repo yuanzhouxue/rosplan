@@ -19,33 +19,32 @@
 // opencv header
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
-namespace rosplane
-{
-    class InhandPredicateObervation : public SensorInterface{
-        public:
-            bool concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg);
-            InhandPredicateObervation();
+namespace rosplane {
+    class InhandPredicateObervation : public SensorInterface {
+    public:
+        bool concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg);
+        InhandPredicateObervation();
 
 
-        private:
-            void observeCallback(const sensor_msgs::ImageConstPtr& imgMsg);
-        
-            std::string imageTopic;
-            std::string windowName;
-            std::string armTopic;
+    private:
+        void observeCallback(const sensor_msgs::ImageConstPtr& imgMsg);
 
-            ros::Publisher pub_head_topic;
-            ros::Publisher pub_arm_topic;
+        std::string imageTopic;
+        std::string windowName;
+        std::string armTopic;
 
-            ros::Subscriber sub_arm_topic;
+        ros::Publisher pub_head_topic;
+        ros::Publisher pub_arm_topic;
 
-            ros::ServiceServer service;
+        ros::Subscriber sub_arm_topic;
 
-            image_transport::Subscriber img_sub;
-            tf::TransformListener listener;
-            tf::StampedTransform transform;
+        ros::ServiceServer service;
 
-            control_msgs::PointHeadActionGoal head_action_goal;
-            trajectory_msgs::JointTrajectory arm_action_goal;
+        image_transport::Subscriber img_sub;
+        tf::TransformListener listener;
+        tf::StampedTransform transform;
+
+        control_msgs::PointHeadActionGoal head_action_goal;
+        trajectory_msgs::JointTrajectory arm_action_goal;
     };
-} 
+}

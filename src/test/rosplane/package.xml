@@ -53,7 +53,6 @@
     <!-- <build_depend>rosplan_dispatch_msgs</build_depend> -->
     <build_depend>rosplan_dependencies</build_depend>
     <build_depend>rosplan_planning_system</build_depend>
-    <build_depend>rosplan_knowledge_base</build_depend>
     <build_depend>rosplan_sensing_interface</build_depend>
     <depend>message_generation</depend>
     <depend>message_runtime</depend>
@@ -63,6 +62,7 @@
     <depend>genmsg</depend>
     <depend>rosplan_dispatch_msgs</depend>
     <depend>rosplan_knowledge_msgs</depend>
+    <depend>rosplan_knowledge_base</depend>
 
 
     <!-- The export tag contains other, unspecified, tags -->

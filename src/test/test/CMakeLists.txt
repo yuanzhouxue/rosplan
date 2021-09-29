@@ -168,6 +168,9 @@ target_link_libraries(inhand_predicate_observation ${catkin_LIBRARIES} ${OpenCV_
 add_executable(robot_at_predicate_observation src/SensorInterface/RobotAtPredicateObservation.cpp)
 target_link_libraries(robot_at_predicate_observation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
+add_executable(rpmovebase src/ActionInterface/RPMoveBase.cpp)
+target_link_libraries(rpmovebase ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use

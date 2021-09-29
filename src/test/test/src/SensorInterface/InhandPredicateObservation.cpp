@@ -1,7 +1,7 @@
 #include "SensorInterface/InhandPredicateObservation.h"
 
-namespace rosplane{
-    InhandPredicateObervation::InhandPredicateObervation(){
+namespace rosplane {
+    InhandPredicateObervation::InhandPredicateObervation() {
         ros::NodeHandle nh("~");
         pub_head_topic = nh.advertise<control_msgs::PointHeadActionGoal>("/head_controller/point_head_action/goal", 1);
         pub_arm_topic = nh.advertise<trajectory_msgs::JointTrajectory>("/arm_controller/command", 1);
@@ -9,7 +9,7 @@ namespace rosplane{
         image_transport::TransportHints transportHints("compressed");
         image_transport::ImageTransport it(nh);
         img_sub = it.subscribe(imageTopic, 1, &InhandPredicateObervation::observeCallback, this, transportHints);
-        
+
 
         head_action_goal.header.frame_id = "/base_link";
         head_action_goal.goal.max_velocity = 1.0;
@@ -27,14 +27,14 @@ namespace rosplane{
         arm_action_goal.joint_names.push_back("arm_7_joint");
     }
 
-    void InhandPredicateObervation::observeCallback(const sensor_msgs::ImageConstPtr& imgMsg){
+    void InhandPredicateObervation::observeCallback(const sensor_msgs::ImageConstPtr& imgMsg) {
         cv_bridge::CvImagePtr cvImgPtr;
         cvImgPtr = cv_bridge::toCvCopy(imgMsg, sensor_msgs::image_encodings::BGR8);
         cv::imshow("test", cvImgPtr->image);
         cv::waitKey(15);
     }
 
-    bool InhandPredicateObervation::concreteCallback(const SensorDispatch::ConstPtr& msg){
+    bool InhandPredicateObervation::concreteCallback(const SensorDispatch::ConstPtr& msg) {
         ROS_INFO("(%s): concretCallback", pred_name.c_str());
         // 检查手有没有拿到glass，拿到返回true，没拿到返回false
 
@@ -125,7 +125,7 @@ namespace rosplane{
 
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     ros::init(argc, argv, "inhand_predicate_observe");
     rosplane::InhandPredicateObervation ipo;
     ipo.runSensorInterface();
