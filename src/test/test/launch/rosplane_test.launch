@@ -8,10 +8,11 @@
     <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch"/>
     <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback"/>
 
+    <!-- rosbridge -->
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 
-    <include file="$(find rosplane)/launch/rosplane_interfaced_planning_system.launch">
-    </include>
+    <!-- rosplan & rosplane framework -->
+    <include file="$(find rosplane)/launch/rosplane_interfaced_planning_system.launch" />
 
     
     <node name="dummy_sensor_inhand" type="dummysensor_node" pkg="test" output="screen">

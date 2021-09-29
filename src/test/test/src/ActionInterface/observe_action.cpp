@@ -1,4 +1,4 @@
-#include "observe_action.h"
+#include "ActionInterface/observe_action.h"
 #include <diagnostic_msgs/KeyValue.h>
 #include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
 #include "rosplan_knowledge_msgs/GetInstanceService.h"

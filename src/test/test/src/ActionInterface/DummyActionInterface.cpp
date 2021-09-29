@@ -1,4 +1,4 @@
-#include "DummyActionInterface.h"
+#include "ActionInterface/DummyActionInterface.h"
 
 bool rosplane::DummyActionInterface::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
     ros::NodeHandle nh("~");

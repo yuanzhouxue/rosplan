@@ -145,21 +145,21 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(dummysensor_node src/DummySensorInterface.cpp)
+add_executable(dummysensor_node src/SensorInterface/DummySensorInterface.cpp)
 target_link_libraries(dummysensor_node ${catkin_LIBRARIES})
-add_executable(dummyaction_node src/DummyActionInterface.cpp)
+add_executable(dummyaction_node src/ActionInterface/DummyActionInterface.cpp)
 target_link_libraries(dummyaction_node ${catkin_LIBRARIES})
 
-add_executable(simulated_movebase_node src/SimulatedMovebase.cpp)
+add_executable(simulated_movebase_node src/ActionInterface/SimulatedMovebase.cpp)
 target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 
-add_executable(pickup_action_node src/PickUpAction.cpp)
+add_executable(pickup_action_node src/ActionInterface/PickUpAction.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
 
-add_executable(observe_action_node src/observe_action.cpp)
+add_executable(observe_action_node src/ActionInterface/observe_action.cpp)
 target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-add_executable(look_around_node src/look_around.cpp)
+add_executable(look_around_node src/ActionInterface/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
 
 
