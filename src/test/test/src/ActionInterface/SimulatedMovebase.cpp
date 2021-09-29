@@ -1,4 +1,4 @@
-#include "SimulatedMovebase.h"
+#include "ActionInterface/SimulatedMovebase.h"
 #include <diagnostic_msgs/KeyValue.h>
 #include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
 #include "rosplan_knowledge_msgs/GetInstanceService.h"
