@@ -1,22 +1,23 @@
 (define (problem hard1)
     (:domain npuzzle_domain)
     (:objects
-        t1 t2 t3 t4 t5 t6 t7 t8 p1 p2 p3
+        t1 t2 t3 t4 t5 t6 t7 t8 - tile
+        p1 p2 p3 - position
     )
 
     (:init
         ;todo: put the initial state's facts and numeric values here
-        (tile t1)
-        (tile t2)
-        (tile t3)
-        (tile t4)
-        (tile t5)
-        (tile t6)
-        (tile t7)
-        (tile t8)
-        (position p1)
-        (position p2)
-        (position p3)
+        ; (tile t1)
+        ; (tile t2)
+        ; (tile t3)
+        ; (tile t4)
+        ; (tile t5)
+        ; (tile t6)
+        ; (tile t7)
+        ; (tile t8)
+        ; (position p1)
+        ; (position p2)
+        ; (position p3)
         (inc p1 p2)
         (inc p2 p3)
         (dec p3 p2)

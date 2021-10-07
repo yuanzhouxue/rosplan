@@ -10,7 +10,8 @@
 
 #include "rosplan_dispatch_msgs/PlanningService.h"
 #include "rosplan_dispatch_msgs/PlanAction.h"
-#include "rosplane/PlanByPDDL.h"
+#include "rosplane/PlanByString.h"
+#include "rosplane/PlanningServerWithReturn.h"
 
 /**
  * This file contains an interface to the planner.
@@ -50,7 +51,8 @@ namespace rosplane {
 
         bool runPlanningServerDefault(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
         bool runPlanningServerParams(rosplan_dispatch_msgs::PlanningService::Request& req, rosplan_dispatch_msgs::PlanningService::Response& res);
-        bool runPlanningServerPDDLDefault(rosplane::PlanByPDDL::Request &req, rosplane::PlanByPDDL::Response &res);
+        bool runPlanningServerStringDefault(rosplane::PlanByString::Request &req, rosplane::PlanByString::Response &res);
+        bool runPlanningServerWithReturn(rosplane::PlanningServerWithReturn::Request &req, rosplane::PlanningServerWithReturn::Response &res);
         void runPlanningServerAction(const rosplan_dispatch_msgs::PlanGoalConstPtr& goal);
         bool runPlanningServer(std::string domainPath, std::string problemPath, std::string dataPath, std::string plannerCommand, bool useProblemTopic);
 

@@ -1,7 +1,7 @@
 #include "SensorInterface/DummySensorInterface.h"
 
 bool rosplane::DummySensorInterface::concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg) {
-    ROS_INFO("(%s): concreteCallback", pred_name.c_str());
+    ROS_INFO("(SensorInterface: %s): concreteCallback", pred_name.c_str());
     return true;
 }
 
