@@ -65,7 +65,8 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  PlanByPDDL.srv
+  PlanByString.srv
+  PlanningServerWithReturn.srv
   ParsingStringSimple.srv
   ParsingStringEsterel.srv
 )

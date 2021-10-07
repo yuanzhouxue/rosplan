@@ -37,19 +37,23 @@ namespace rosplane {
         node_handle->getParam("problem_path", problem_path);
         node_handle->getParam("planner_command", planner_command);
 
+        if (data_path.back() != '/') data_path.push_back('/');
+        std::string domainFilename = (domain_path.size() > 5) ? domain_path.substr(domain_path.find_last_of('/') + 1) : "";
+        std::string problemFilename = (problem_path.size() > 5) ? problem_path.substr(problem_path.find_last_of('/') + 1) : "";
+        domain_path = data_path + domainFilename;
+        problem_path = data_path + problemFilename;
+
         // call planning server
         return runPlanningServer(domain_path, problem_path, data_path, planner_command, use_problem_topic);
     }
 
-    bool PlannerInterface::runPlanningServerPDDLDefault(rosplane::PlanByPDDL::Request& req, rosplane::PlanByPDDL::Response& res) {
-        ROS_INFO("debug");
-        // TODO: 将domain和problem写入临时文件
+    bool PlannerInterface::runPlanningServerStringDefault(rosplane::PlanByString::Request& req, rosplane::PlanByString::Response& res) {
         // defaults
         use_problem_topic = false;
         data_path = "common/";
         planner_command = "timeout 60 common/bin/popf -n DOMAIN PROBLEM";
         // load params0
-        
+
         node_handle->getParam("use_problem_topic", use_problem_topic);
         node_handle->getParam("data_path", data_path);
         node_handle->getParam("planner_command", planner_command);
@@ -59,6 +63,7 @@ namespace rosplane {
         const char* last_char = &data_path.back();
         if (strcmp(last_char, "/") != 0)data_path = data_path + "/";
 
+        // TODO: 动态确定文件名(后缀)
         domain_path = data_path + "mas_domain.pddl";
         problem_path = data_path + "mas_problem.pddl";
         std::ofstream domain_file;
@@ -68,6 +73,9 @@ namespace rosplane {
         domain_file.open(problem_path.c_str());
         domain_file << req.problem;
         domain_file.close();
+
+        // std_srvs::Empty e;
+        // ros::ServiceClient reloadKB = ros::ServiceClient()
 
 
         // set problem name for ROS_INFO
@@ -103,6 +111,59 @@ namespace rosplane {
         // call planning server
         res.plan_found = runPlanningServer(req.domain_path, req.problem_path, req.data_path, req.planner_command, req.use_problem_topic);
         return true;
+    }
+
+    bool PlannerInterface::runPlanningServerWithReturn(rosplane::PlanningServerWithReturn::Request& req, rosplane::PlanningServerWithReturn::Response& res) {
+        // //////////////////////////////////////////
+        // copied from runPlanningServerDefault
+        // defaults
+        use_problem_topic = false;
+        data_path = "common/";
+        domain_path = "common/domain.pddl";
+        problem_path = "common/problem.pddl";
+        planner_command = "timeout 60 common/bin/popf -n DOMAIN PROBLEM";
+
+        // load params
+        node_handle->getParam("use_problem_topic", use_problem_topic);
+        node_handle->getParam("domain_path", domain_path);
+        node_handle->getParam("data_path", data_path);
+        node_handle->getParam("problem_path", problem_path);
+        node_handle->getParam("planner_command", planner_command);
+
+        if (data_path.back() != '/') data_path.push_back('/');
+        std::string domainFilename = (domain_path.size() > 5) ? domain_path.substr(domain_path.find_last_of('/') + 1) : "";
+        std::string problemFilename = (problem_path.size() > 5) ? problem_path.substr(problem_path.find_last_of('/') + 1) : "";
+        domain_path = data_path + domainFilename;
+        problem_path = data_path + problemFilename;
+        // //////////////////////////////////////////
+
+        // //////////////////////////////////////////
+        // copied from runPlanningServer
+        // check if data_path ends in "/" and add "/" if not
+        const char* last_char = &data_path.back();
+        if (strcmp(last_char, "/") != 0)data_path = data_path + "/";
+
+        // set problem name for ROS_INFO
+        std::size_t lastDivide = problem_path.find_last_of("/\\");
+        if (lastDivide != std::string::npos) {
+            problem_name = problem_path.substr(lastDivide + 1);
+        } else {
+            problem_name = problem_path;
+        }
+
+        if (use_problem_topic && !problem_instance_received) {
+            ROS_INFO("KCL: (%s) (%s) Problem was not published yet.", ros::this_node::getName().c_str(), problem_name.c_str());
+            return false;
+        }
+
+        bool success = runPlanner();
+
+        // publish planner output
+        if (success) {
+            res.plan = planner_output;
+        }
+        return success;
+        // //////////////////////////////////////////
     }
 
     /**

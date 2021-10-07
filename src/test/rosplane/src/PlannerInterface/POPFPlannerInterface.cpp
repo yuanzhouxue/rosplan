@@ -129,7 +129,8 @@ int main(int argc, char** argv) {
     // start the planning services
     ros::ServiceServer service1 = nh.advertiseService("planning_server", &rosplane::PlannerInterface::runPlanningServerDefault, dynamic_cast<rosplane::PlannerInterface*>(&pi));
     ros::ServiceServer service2 = nh.advertiseService("planning_server_params", &rosplane::PlannerInterface::runPlanningServerParams, dynamic_cast<rosplane::PlannerInterface*>(&pi));
-    ros::ServiceServer service3 = nh.advertiseService("planning_pddl", &rosplane::PlannerInterface::runPlanningServerPDDLDefault, dynamic_cast<rosplane::PlannerInterface*>(&pi));
+    ros::ServiceServer service3 = nh.advertiseService("planning_string", &rosplane::PlannerInterface::runPlanningServerStringDefault, dynamic_cast<rosplane::PlannerInterface*>(&pi));
+    ros::ServiceServer service4 = nh.advertiseService("planning_server_ret", &rosplane::PlannerInterface::runPlanningServerWithReturn, dynamic_cast<rosplane::PlannerInterface*>(&pi));
     ROS_INFO("KCL: (%s) Ready to receive", ros::this_node::getName().c_str());
     ros::spin();
 

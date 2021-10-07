@@ -5,7 +5,7 @@ bool rosplane::DummyActionInterface::concreteCallback(const rosplan_dispatch_msg
     // set action name
     std::string action_name;
     nh.getParam("pddl_action_name", action_name);
-    ROS_INFO("(%s): concreteCallback", action_name.c_str());
+    ROS_INFO("(ActionInterface: %s): concreteCallback", action_name.c_str());
     return true;
 }
 

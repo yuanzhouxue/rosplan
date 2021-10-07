@@ -18,6 +18,7 @@
     <node name="rosplan_knowledge_base" pkg="rosplan_knowledge_base" type="knowledgeBase" respawn="false" output="screen">
         <param name="domain_path" value="$(arg domain_path)" />
         <param name="problem_path" value="$(arg problem_path)" />
+        <param name="data_path" value="$(arg data_path)" />
         <!-- conditional planning flags -->
         <param name="use_unknowns" value="false" />
     </node>
