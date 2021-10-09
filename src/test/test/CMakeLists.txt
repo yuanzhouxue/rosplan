@@ -156,6 +156,9 @@ target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 add_executable(pickup_action_node src/ActionInterface/PickUpAction.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
 
+add_executable(place_action_node src/ActionInterface/PlaceAction.cpp)
+target_link_libraries(place_action_node ${catkin_LIBRARIES})
+
 add_executable(observe_action_node src/ActionInterface/observe_action.cpp)
 target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
