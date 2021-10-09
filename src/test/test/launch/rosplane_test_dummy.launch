@@ -53,6 +53,13 @@
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
     </node>
 
+    <node name="action_place" type="dummyaction_node" pkg="test" output="screen" >
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pddl_action_name" value="place" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+
     <node name="action_goto_waypoint" type="dummyaction_node" pkg="test" output="screen" >
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pddl_action_name" value="goto_waypoint" />
