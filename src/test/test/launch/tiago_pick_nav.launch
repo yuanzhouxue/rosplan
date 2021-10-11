@@ -43,6 +43,8 @@
     <group ns="$(arg namespace)">
 
         <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
+            <env name="GAZEBO_MODEL_PATH" value="$(find test)" />
+            <env name="GAZEBO_RESOURCE_PATH" value="$(find test)" />
             <arg name="world" value="$(arg world)" />
             <arg name="arm" value="$(arg arm)" />
             <arg name="end_effector" value="$(arg end_effector)" />

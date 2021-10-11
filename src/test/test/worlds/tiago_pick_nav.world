@@ -3417,18 +3417,18 @@
             <pose frame=''>-4 -5.47465 0 0 -0 0</pose>
         </model>
         <state world_name='default'>
-            <sim_time>2436 79000000</sim_time>
-            <real_time>383 132004661</real_time>
-            <wall_time>1633694997 669660955</wall_time>
-            <iterations>380814</iterations>
+            <sim_time>0 0</sim_time>
+            <real_time>0 0</real_time>
+            <wall_time>0 0</wall_time>
+            <iterations>0</iterations>
             <model name='aruco_cube_0'>
-                <pose frame=''>0.739853 -0.103913 0.864997 1e-06 0.000103 1.61744</pose>
+                <pose frame=''>0.679957 -0.024883 0.865 0 0 0</pose>
                 <scale>1 1 1</scale>
                 <link name='link'>
-                    <pose frame=''>0.739853 -0.103913 0.864997 1e-06 0.000103 1.61744</pose>
-                    <velocity>-0.000412 0.004352 -0.003439 -0.146936 -0.004161 -0.000499</velocity>
-                    <acceleration>-0.38748 0.399746 -3.65964 -2.03376 -0.073028 -1.73965</acceleration>
-                    <wrench>-0.019374 0.019987 -0.182982 0 -0 0</wrench>
+                    <pose frame=''>0.679957 -0.024883 0.865 0 0 0</pose>
+                    <velocity>0 0 0 0 0 0</velocity>
+                    <acceleration>0 0 -9.81 0 0 0</acceleration>
+                    <wrench>0 0 -9.81 0 0 0</wrench>
                 </link>
             </model>
             <model name='bookshelf'>
@@ -3542,13 +3542,13 @@
                 </link>
             </model>
             <model name='table_0'>
-                <pose frame=''>1.38533 -0.171828 -0.100001 2e-06 0 0</pose>
+                <pose frame=''>1.38019 -0.013767 -0.100001 2e-06 0 0</pose>
                 <scale>1 1 1</scale>
                 <link name='link'>
-                    <pose frame=''>1.38533 -0.171828 -0.100001 2e-06 0 0</pose>
+                    <pose frame=''>1.38019 -0.013767 -0.100001 2e-06 0 0</pose>
                     <velocity>0 0 0 0 -0 0</velocity>
                     <acceleration>0 0 -9.81 0 0 0</acceleration>
-                    <wrench>0.027128 0.367571 0.175964 0 -0 0</wrench>
+                    <wrench>0 0 -9.81 0 0 0</wrench>
                 </link>
             </model>
             <model name='table_1'>
