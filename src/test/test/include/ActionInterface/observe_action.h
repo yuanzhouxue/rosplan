@@ -8,7 +8,7 @@
 #include <tf/transform_listener.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/buffer_core.h>
-#include <RPActionInterface.h>
+#include <rosplan_action_interface/RPActionInterface.h>
 #include <std_srvs/Empty.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
@@ -21,7 +21,7 @@
 #include <cv_bridge/cv_bridge.h>
 
 namespace rosplane {
-    class RPObserveAction : public RPActionInterface {
+    class RPObserveAction : public KCL_rosplan::RPActionInterface {
     public:
         RPObserveAction();
         bool concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg);

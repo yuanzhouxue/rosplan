@@ -11,7 +11,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <cstdlib>
 
-#include "RPActionInterface.h"
+#include "rosplan_action_interface/RPActionInterface.h"
 #include "rosplan_knowledge_msgs/KnowledgeUpdateService.h"
 #include <diagnostic_msgs/KeyValue.h>
 #include "rosplan_knowledge_msgs/KnowledgeUpdateServiceArray.h"
@@ -42,7 +42,7 @@ using std::vector;
  */
 namespace rosplane {
 
-    class PlaceAction : public RPActionInterface {
+    class PlaceAction : public KCL_rosplan::RPActionInterface {
 
     private:
         // action lib client that will make the communication with move_base action server

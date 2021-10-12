@@ -107,7 +107,7 @@ namespace rosplane {
      * planning system service method (2)
      * loads parameters from service request
      */
-    bool PlannerInterface::runPlanningServerParams(rosplan_dispatch_msgs::PlanningService::Request& req, rosplan_dispatch_msgs::PlanningService::Response& res) {
+    bool PlannerInterface::runPlanningServerParams(rosplan_planning_msgs::PlanningService::Request& req, rosplan_planning_msgs::PlanningService::Response& res) {
         // call planning server
         res.plan_found = runPlanningServer(req.domain_path, req.problem_path, req.data_path, req.planner_command, req.use_problem_topic);
         return true;

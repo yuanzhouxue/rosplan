@@ -5,7 +5,6 @@
 #include <ctime>
 #include <string>
 #include <streambuf>
-#include "rosplane/PlanByPDDL.h"
 
 #ifndef ROSPLANE_POPF_planner_interface
 #define ROSPLANE_POPF_planner_interface

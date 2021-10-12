@@ -1,4 +1,4 @@
-#include <SensorInterface/SensorInterface.h>
+#include <rosplan_sensor_interface/SensorInterface.h>
 
 // ros header
 #include <ros/ros.h>
@@ -13,7 +13,7 @@
 
 namespace rosplane
 {
-    class RobotAtPredicateObservation : public SensorInterface
+    class RobotAtPredicateObservation : public KCL_rosplan::SensorInterface
     {
     private:
         ros::NodeHandle nh;
@@ -24,7 +24,7 @@ namespace rosplane
         tf::TransformListener listener;
         tf::StampedTransform transform;
     public:
-        bool concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg);
+        bool concreteCallback(const rosplan_dispatch_msgs::SensorDispatch::ConstPtr& msg);
         RobotAtPredicateObservation(/* args */);
     };
 }

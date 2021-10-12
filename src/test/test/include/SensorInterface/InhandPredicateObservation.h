@@ -1,4 +1,4 @@
-#include <SensorInterface/SensorInterface.h>
+#include <rosplan_sensor_interface/SensorInterface.h>
 
 // ros header
 #include <control_msgs/PointHeadActionGoal.h>
@@ -8,7 +8,6 @@
 #include <tf/transform_listener.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/buffer_core.h>
-#include <RPActionInterface.h>
 #include <std_srvs/Empty.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
@@ -20,9 +19,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 namespace rosplane {
-    class InhandPredicateObervation : public SensorInterface {
+    class InhandPredicateObervation : public KCL_rosplan::SensorInterface {
     public:
-        bool concreteCallback(const rosplane::SensorDispatch::ConstPtr& msg);
+        bool concreteCallback(const rosplan_dispatch_msgs::SensorDispatch::ConstPtr& msg);
         InhandPredicateObervation();
 
 

@@ -21,7 +21,7 @@ namespace rosplane {
      * plan parsing service method (1)
      * loads plan from file
      */
-    bool PlanParser::parsePlanFromFile(rosplan_dispatch_msgs::ParsingService::Request& req, rosplan_dispatch_msgs::ParsingService::Response& res) {
+    bool PlanParser::parsePlanFromFile(rosplan_planning_msgs::ParsingService::Request& req, rosplan_planning_msgs::ParsingService::Response& res) {
 
         ROS_INFO("KCL: (%s) Parsing plan from file.", ros::this_node::getName().c_str());
 
