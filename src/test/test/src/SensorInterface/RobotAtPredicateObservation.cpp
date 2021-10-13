@@ -9,7 +9,7 @@ namespace rosplane
         head_goal.joint_names.push_back("head_2_joint");
     }
 
-    bool RobotAtPredicateObservation::concreteCallback(const SensorDispatch::ConstPtr& msg){
+    bool RobotAtPredicateObservation::concreteCallback(const rosplan_dispatch_msgs::SensorDispatch::ConstPtr& msg){
         head_goal.points.resize(4);
 
         for (int i = 0; i < 4; ++i) {

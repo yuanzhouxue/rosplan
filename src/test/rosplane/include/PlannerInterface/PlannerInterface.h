@@ -8,7 +8,7 @@
 #include "std_srvs/Empty.h"
 #include <fstream>
 
-#include "rosplan_dispatch_msgs/PlanningService.h"
+#include "rosplan_planning_msgs/PlanningService.h"
 #include "rosplan_dispatch_msgs/PlanAction.h"
 #include "rosplane/PlanByString.h"
 #include "rosplane/PlanningServerWithReturn.h"
@@ -50,7 +50,7 @@ namespace rosplane {
         void problemCallback(const std_msgs::String& problemInstance);
 
         bool runPlanningServerDefault(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-        bool runPlanningServerParams(rosplan_dispatch_msgs::PlanningService::Request& req, rosplan_dispatch_msgs::PlanningService::Response& res);
+        bool runPlanningServerParams(rosplan_planning_msgs::PlanningService::Request& req, rosplan_planning_msgs::PlanningService::Response& res);
         bool runPlanningServerStringDefault(rosplane::PlanByString::Request &req, rosplane::PlanByString::Response &res);
         bool runPlanningServerWithReturn(rosplane::PlanningServerWithReturn::Request &req, rosplane::PlanningServerWithReturn::Response &res);
         void runPlanningServerAction(const rosplan_dispatch_msgs::PlanGoalConstPtr& goal);

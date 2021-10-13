@@ -20,7 +20,7 @@
     <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
         <arg name="robot" value="$(arg robot)" />
         <arg name="public_sim" value="$(arg public_sim)" />
-        <arg name="world" value="tabletop_cube" />
+        <arg name="world" value="tiago_pick_nav" />
         <arg name="gui" value="$(arg gazebo_gui)" />
         <arg name="recording" value="$(arg recording)" />
         <arg name="use_moveit_camera" value="$(arg use_moveit_camera)"/>

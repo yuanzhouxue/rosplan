@@ -8,7 +8,6 @@ project(test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-    rosplane
     rosplan_planning_system
     aruco
     aruco_msgs
@@ -115,10 +114,10 @@ find_package(OpenCV REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES test
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
+    INCLUDE_DIRS include
+    # LIBRARIES test
+    CATKIN_DEPENDS rosplan_planning_system
+    DEPENDS
 )
 
 ###########
@@ -155,6 +154,9 @@ target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 
 add_executable(pickup_action_node src/ActionInterface/PickUpAction.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
+
+add_executable(place_action_node src/ActionInterface/PlaceAction.cpp)
+target_link_libraries(place_action_node ${catkin_LIBRARIES})
 
 add_executable(observe_action_node src/ActionInterface/observe_action.cpp)
 target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

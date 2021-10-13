@@ -42,12 +42,12 @@ using std::vector;
  */
 namespace rosplane {
 
-    class PickUpAction : public KCL_rosplan::RPActionInterface {
+    class PlaceAction : public KCL_rosplan::RPActionInterface {
 
     private:
         // action lib client that will make the communication with move_base action server
         actionlib::SimpleActionClient<play_motion_msgs::PlayMotionAction> play_m_as;
-        actionlib::SimpleActionClient<tiago_pick_demo::PickUpPoseAction> pick_as;
+        actionlib::SimpleActionClient<tiago_pick_demo::PickUpPoseAction> place_as;
 
         ros::Publisher torso_cmd, head_cmd, detected_pos_pub;
 
@@ -82,7 +82,7 @@ namespace rosplane {
     public:
 
         /* constructor */
-        PickUpAction();
+        PlaceAction();
 
         /* listen to and process action_dispatch topic */
         bool concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg);

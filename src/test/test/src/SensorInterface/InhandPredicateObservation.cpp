@@ -34,7 +34,7 @@ namespace rosplane {
         cv::waitKey(15);
     }
 
-    bool InhandPredicateObervation::concreteCallback(const SensorDispatch::ConstPtr& msg) {
+    bool InhandPredicateObervation::concreteCallback(const rosplan_dispatch_msgs::SensorDispatch::ConstPtr& msg) {
         ROS_INFO("(%s): concretCallback", pred_name.c_str());
         // 检查手有没有拿到glass，拿到返回true，没拿到返回false
 
