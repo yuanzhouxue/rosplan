@@ -45,5 +45,8 @@ namespace rosplane {
 
         control_msgs::PointHeadActionGoal head_action_goal;
         trajectory_msgs::JointTrajectory arm_action_goal;
+        trajectory_msgs::JointTrajectory take_back_arm;
+
+        bool observe_flag;
     };
 }
