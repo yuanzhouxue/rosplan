@@ -25,6 +25,16 @@ namespace rosplane {
         arm_action_goal.joint_names.push_back("arm_5_joint");
         arm_action_goal.joint_names.push_back("arm_6_joint");
         arm_action_goal.joint_names.push_back("arm_7_joint");
+
+        take_back_arm.joint_names.push_back("arm_1_joint");
+        take_back_arm.joint_names.push_back("arm_2_joint");
+        take_back_arm.joint_names.push_back("arm_3_joint");
+        take_back_arm.joint_names.push_back("arm_4_joint");
+        take_back_arm.joint_names.push_back("arm_5_joint");
+        take_back_arm.joint_names.push_back("arm_6_joint");
+        take_back_arm.joint_names.push_back("arm_7_joint");
+
+        observe_flag = false;
     }
 
     void InhandPredicateObervation::observeCallback(const sensor_msgs::ImageConstPtr& imgMsg) {
@@ -116,9 +126,33 @@ namespace rosplane {
         if (observe_res != nullptr && now - observe_res->header.stamp < ros::Duration(2.0)) {
             ROS_INFO("%d, %d", observe_res->header.stamp.nsec, observe_res->header.stamp.sec);
             ROS_INFO("%d, %d", now.nsec, now.sec);
-            return true;
+            // return true;
+            observe_flag = true;
         }
 
+        // 将机器人手臂收回面前，不移动手指关节
+        take_back_arm.points.resize(1);
+        take_back_arm.points[0].positions.resize(7);
+        take_back_arm.points[0].positions[0] = 0.2;
+        take_back_arm.points[0].positions[1] = -1.34;
+        take_back_arm.points[0].positions[2] = -0.2;
+        take_back_arm.points[0].positions[3] = 1.94;
+        take_back_arm.points[0].positions[4] = -1.57;
+        take_back_arm.points[0].positions[5] = 1.37;
+        take_back_arm.points[0].positions[6] = 0.0;
+        take_back_arm.points[0].velocities.resize(7);
+        for (int i = 0; i < 7; i++) {
+            take_back_arm.points[0].velocities[i] = 0.0;
+        }
+        
+        take_back_arm.points[0].time_from_start = ros::Duration(12.0);
+        take_back_arm.header.stamp = ros::Time::now();
+        pub_arm_topic.publish(take_back_arm);
+        
+
+        if (observe_flag) {
+            return observe_flag;
+        }
         return false;
     }
 
