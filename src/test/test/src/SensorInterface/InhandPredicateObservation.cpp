@@ -8,7 +8,7 @@ namespace rosplane {
         imageTopic = "/xtion/rgb/image_raw";
         image_transport::TransportHints transportHints("compressed");
         image_transport::ImageTransport it(nh);
-        img_sub = it.subscribe(imageTopic, 1, &InhandPredicateObervation::observeCallback, this, transportHints);
+        // img_sub = it.subscribe(imageTopic, 1, &InhandPredicateObervation::observeCallback, this, transportHints);
 
 
         head_action_goal.header.frame_id = "/base_link";

@@ -2,14 +2,14 @@
 
 
 <launch>
-    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch"/>
-    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback"/>
+    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch" />
+    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback" />
 
-    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch"/>
-    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback"/>
+    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch" />
+    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback" />
 
     <!-- rosbridge -->
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
     <!-- rosplan & rosplane framework -->
     <!-- ROSPlan -->
@@ -24,7 +24,7 @@
         <arg name="data_path" value="$(find test)/output/" />
     </include>
 
-    
+
     <node name="sensor_in_hand" type="inhand_predicate_observation" pkg="test" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="in_hand" />
@@ -60,21 +60,21 @@
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
 
-    <node name="action_pick" type="pickup_action_node" pkg="test" output="screen" >
+    <node name="action_pick" type="pickup_action_node" pkg="test" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pddl_action_name" value="pick" />
         <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
     </node>
 
-    <node name="action_place" type="place_action_node" pkg="test" output="screen" >
+    <node name="action_place" type="place_action_node" pkg="test" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pddl_action_name" value="place" />
         <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
     </node>
 
-    <node name="action_goto_waypoint" type="rpmovebase" pkg="test" output="screen" >
+    <node name="action_goto_waypoint" type="rpmovebase" pkg="test" output="screen">
         <rosparam file="$(find test)/config/waypoints.yaml" command="load" />
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="wp_namespace" value="/action_goto_waypoint/tiago_pick_nav_waypoints" />
@@ -83,8 +83,8 @@
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
     </node>
 
-    <include file="$(find test)/launch/tiago_pick.launch" >
-        <arg name="pddl_action_name" value="grasp"/>
+    <include file="$(find test)/launch/tiago_pick.launch">
+        <arg name="pddl_action_name" value="grasp" />
     </include>
 
 </launch>

@@ -13,7 +13,7 @@
     </include>
 
     <!-- turtlebot3 navigation: move base, amcl (localisation) -->
-    <include file="$(find test)/launch/sublaunch/turtlebot3_navigation.launch" >
+    <include file="$(find test)/launch/sublaunch/turtlebot/turtlebot3_navigation.launch" >
         <arg name="map_file" value="$(arg map_file)"/>
         <arg name="open_rviz" value="false"/>
     </include>

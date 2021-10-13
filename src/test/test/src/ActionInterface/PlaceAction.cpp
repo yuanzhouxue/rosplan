@@ -29,6 +29,7 @@ namespace rosplane {
         ROS_INFO("(%s): Setting publishers to torso and head controller...", node_name.c_str());
         torso_cmd = nh_.advertise<trajectory_msgs::JointTrajectory>("/torso_controller/command", 1);
         head_cmd = nh_.advertise<trajectory_msgs::JointTrajectory>("/head_controller/command", 1);
+        gripper_cmd = nh_.advertise<trajectory_msgs::JointTrajectory>("/gripper_controller/command", 1);
         detected_pos_pub = nh_.advertise<geometry_msgs::PoseStamped>("/detected_aruco_pose", 1, true);
 
         ROS_INFO("(%s): Waiting for '/play_motion' AS...", node_name.c_str());
@@ -97,53 +98,6 @@ namespace rosplane {
 
     /* action dispatch callback */
     bool PlaceAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-        // if (!robot_prepared) {
-            // prepareRobot();
-            // robot_prepared = true;
-        // }
-
-        // ROS_INFO("(%s): spherical_grasp_gui: Waiting for an aruco detection", node_name.c_str());
-        // auto aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
-        // auto newFrameId = stripLeadingSlash(aruco_pose->header.frame_id);
-        // geometry_msgs::PoseStamped ps;
-        // ps.pose.position = aruco_pose->pose.position;
-        // // TODO: I dont know what is tfBuffer.get_latest_common_time(...), so I used ros::Time::now() instead
-        // ps.header.stamp = ros::Time::now();
-        // ps.header.frame_id = newFrameId;
-        // bool transformOK = false;
-        // geometry_msgs::PoseStamped aruco_ps;
-        // while (!transformOK && !ros::isShuttingDown()) {
-        //     try {
-        //         auto time = ros::Time::now();
-        //         while (!tfBuffer.canTransform(newFrameId, string("base_footprint"), time)) ros::Duration(0.01).sleep();
-        //         auto transform = tfBuffer.lookupTransform(string("base_footprint"), newFrameId, time);
-        //         tf2::doTransform(ps, aruco_ps, transform);
-        //         transformOK = true;
-        //     }
-        //     catch (exception e) {
-        //         ROS_WARN("(%s): Exception on transforming point... trying again \n(%s)", node_name.c_str(), e.what());
-        //         ros::Duration(0.01).sleep();
-        //         ps.header.stamp = ros::Time::now();
-        //     }
-        // }
-        // tiago_pick_demo::PickUpPoseGoal pick_g;
-        // ROS_INFO("(%s): Setting cube pose based on ArUco detection", node_name.c_str());
-        // pick_g.object_pose.pose.position = aruco_ps.pose.position;
-        // pick_g.object_pose.pose.position.z -= 0.1 * (1.0 / 2.0);
-
-        // ROS_INFO("(%s): aruco pose in base_footprint: %f, %f, %f", node_name.c_str(), pick_g.object_pose.pose.position.x, pick_g.object_pose.pose.position.y, pick_g.object_pose.pose.position.z);
-        // pick_g.object_pose.header.frame_id = "base_footprint";
-        // pick_g.object_pose.pose.orientation.w = 1.0;
-        // detected_pos_pub.publish(pick_g.object_pose);
-        // ROS_INFO("(%s): Gonna pick.", node_name.c_str());
-        // place_as.sendGoalAndWait(pick_g);
-        // ROS_INFO("(%s): Done.", node_name.c_str());
-
-        // auto result = place_as.getResult();
-        // if (result->error_code != moveit_msgs::MoveItErrorCodes::SUCCESS) {
-        //     ROS_INFO("(%s): Failed to pick, not trying further.", node_name.c_str());
-        //     return false;
-        // }
 
         liftTorso();
         tiago_pick_demo::PickUpPoseGoal pick_g;
@@ -151,18 +105,18 @@ namespace rosplane {
         pick_g.object_pose.pose.position.y = -0.05;
         pick_g.object_pose.pose.position.z = 1.0;
 
-        // ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());
-        // play_motion_msgs::PlayMotionGoal pmg;
-        // pmg.motion_name = "pick_final_pose";
-        // pmg.skip_planning = false;
-        // play_m_as.sendGoalAndWait(pmg);
-        // ROS_INFO("(%s): Raise object done.", node_name.c_str());
-
         ROS_INFO("(%s): Gonna place the object on the table.", ros::this_node::getName().c_str());
         pick_g.object_pose.pose.position.z += 0.05;
         place_as.sendGoalAndWait(pick_g);
         ROS_INFO("(%s): Done.", ros::this_node::getName().c_str());
-        
+
+        trajectory_msgs::JointTrajectory jt;
+        jt.joint_names = { "gripper_left_finger_joint", "gripper_right_finger_joint" };
+        trajectory_msgs::JointTrajectoryPoint jtp;
+        jtp.positions = { 0.044, 0.044 };
+        jtp.time_from_start = ros::Duration(1.0);
+        jt.points.push_back(jtp);
+        head_cmd.publish(jt);
 
         return true;
     }
