@@ -86,7 +86,7 @@ namespace rosplane {
         // 
 
         // first position
-        arm_action_goal.points.resize(2);
+        arm_action_goal.points.resize(3);
         arm_action_goal.points[0].positions.resize(7);
         arm_action_goal.points[0].positions[0] = res->actual.positions[0];
         arm_action_goal.points[0].positions[1] = -0.21;
@@ -104,19 +104,34 @@ namespace rosplane {
 
         // second position
         arm_action_goal.points[1].positions.resize(7);
-        arm_action_goal.points[1].positions[0] = res->actual.positions[0];
-        arm_action_goal.points[1].positions[1] = -0.21;
-        arm_action_goal.points[1].positions[2] = -2.20;
-        arm_action_goal.points[1].positions[3] = 1.16;
-        arm_action_goal.points[1].positions[4] = -0.71;
-        arm_action_goal.points[1].positions[5] = 1.11;
-        arm_action_goal.points[1].positions[6] = -2.0;
+        arm_action_goal.points[1].positions[0] = 0.28;
+        arm_action_goal.points[1].positions[1] = -0.80;
+        arm_action_goal.points[1].positions[2] = -3.22;
+        arm_action_goal.points[1].positions[3] = 2.21;
+        arm_action_goal.points[1].positions[4] = -0.41;
+        arm_action_goal.points[1].positions[5] = -1.34;
+        arm_action_goal.points[1].positions[6] = -2.07;
         arm_action_goal.points[1].velocities.resize(7);
         for (int i = 0; i < 7; i++) {
             arm_action_goal.points[1].velocities[i] = 0.0;
         }
 
+
         arm_action_goal.points[1].time_from_start = ros::Duration(4.0);
+
+        arm_action_goal.points[2].positions.resize(7);
+        arm_action_goal.points[2].positions[0] = 0.28;
+        arm_action_goal.points[2].positions[1] = -0.80;
+        arm_action_goal.points[2].positions[2] = -3.22;
+        arm_action_goal.points[2].positions[3] = 2.21;
+        arm_action_goal.points[2].positions[4] = -0.41;
+        arm_action_goal.points[2].positions[5] = -1.34;
+        arm_action_goal.points[2].positions[6] = 2.0;
+        arm_action_goal.points[2].velocities.resize(7);
+        for (int i = 0; i < 7; i++) {
+            arm_action_goal.points[2].velocities[i] = 0.0;
+        }
+        arm_action_goal.points[2].time_from_start = ros::Duration(12.0);
         arm_action_goal.header.stamp = ros::Time::now();
         pub_arm_topic.publish(arm_action_goal);
 
@@ -147,7 +162,7 @@ namespace rosplane {
         
         take_back_arm.points[0].time_from_start = ros::Duration(12.0);
         take_back_arm.header.stamp = ros::Time::now();
-        pub_arm_topic.publish(take_back_arm);
+        // pub_arm_topic.publish(take_back_arm);
         
 
         if (observe_flag) {
@@ -155,6 +170,7 @@ namespace rosplane {
         }
         return false;
     }
+
 
 
 }
