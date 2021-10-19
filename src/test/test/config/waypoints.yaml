@@ -3,5 +3,5 @@ tiago_pick_nav_waypoints:
     waypoint_frameid: map
 
     # waypoint 2D coordinates: x, y, theta
-    wp0: [0.0, 0.0, 0.0]
-    wp1: [-1.0, -10.5, -1.57]
+    wp0: [-2.7, 0.40, 1.560796326]
+    wp1: [-1.2, -10.5, 3.141592653]

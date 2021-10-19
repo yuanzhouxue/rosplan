@@ -22,6 +22,7 @@
 #   * Jordi Pages
 
 import rospy
+from rospy.exceptions import ROSException
 from spherical_grasps_server import SphericalGrasps
 from actionlib import SimpleActionClient, SimpleActionServer
 from moveit_commander import PlanningSceneInterface
@@ -53,6 +54,7 @@ from moveit_msgs.srv import (
     GetPlanningSceneResponse,
 )
 from std_srvs.srv import Empty, EmptyRequest
+from std_msgs.msg import Float32MultiArray
 from copy import deepcopy
 from random import shuffle
 import copy
@@ -229,11 +231,22 @@ class PickAndPlaceServer(object):
         table_pose = copy.deepcopy(object_pose)
 
         # define a virtual table below the object
-        table_height = object_pose.pose.position.z - self.object_width / 2
-        table_width = 1.8
-        table_depth = 0.5
-        table_pose.pose.position.z += -(2 * self.object_width) / 2 - table_height / 2
-        table_height -= 0.008  # remove few milimeters to prevent contact between the object and the table
+        try:
+            table_msg = rospy.wait_for_message("/segment_table/plane_coeffs", Float32MultiArray, 3.0)
+            table_height = table_msg.data[4] - 0.008
+            table_width = table_msg.data[1] - table_msg.data[0]
+            table_depth = table_msg.data[3] - table_msg.data[2]
+            table_pose.pose.position.y = (table_msg.data[3] + table_msg.data[2]) / 2
+            table_pose.pose.position.x = (table_msg.data[1] + table_msg.data[0]) / 2
+            table_pose.pose.position.z = table_height / 2
+        except ROSException as e:
+            table_height = object_pose.pose.position.z - self.object_width / 2
+            table_width = 1.8
+            table_depth = 1.0
+            table_pose.pose.position.z += -(2 * self.object_width) / 2 - table_height / 2
+            table_pose.pose.position.x = 1.0
+            table_pose.pose.position.y = 0
+            table_height -= 0.008  # remove few milimeters to prevent contact between the object and the table
 
         self.scene.add_box(
             "table", table_pose, (table_depth, table_width, table_height)

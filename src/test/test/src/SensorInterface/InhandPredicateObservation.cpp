@@ -100,7 +100,7 @@ namespace rosplane {
             arm_action_goal.points[0].velocities[i] = 0.0;
         }
 
-        arm_action_goal.points[0].time_from_start = ros::Duration(4.0);
+        arm_action_goal.points[0].time_from_start = ros::Duration(2.0);
 
         // second position
         arm_action_goal.points[1].positions.resize(7);
@@ -116,7 +116,7 @@ namespace rosplane {
             arm_action_goal.points[1].velocities[i] = 0.0;
         }
 
-        arm_action_goal.points[1].time_from_start = ros::Duration(8.0);
+        arm_action_goal.points[1].time_from_start = ros::Duration(4.0);
         arm_action_goal.header.stamp = ros::Time::now();
         pub_arm_topic.publish(arm_action_goal);
 
@@ -133,12 +133,12 @@ namespace rosplane {
         // 将机器人手臂收回面前，不移动手指关节
         take_back_arm.points.resize(1);
         take_back_arm.points[0].positions.resize(7);
-        take_back_arm.points[0].positions[0] = 0.2;
-        take_back_arm.points[0].positions[1] = -1.34;
-        take_back_arm.points[0].positions[2] = -0.2;
-        take_back_arm.points[0].positions[3] = 1.94;
-        take_back_arm.points[0].positions[4] = -1.57;
-        take_back_arm.points[0].positions[5] = 1.37;
+        take_back_arm.points[0].positions[0] = 0.59;
+        take_back_arm.points[0].positions[1] = 0.09;
+        take_back_arm.points[0].positions[2] = -1.38;
+        take_back_arm.points[0].positions[3] = 2.29;
+        take_back_arm.points[0].positions[4] = 0.21;
+        take_back_arm.points[0].positions[5] = 1.11;
         take_back_arm.points[0].positions[6] = 0.0;
         take_back_arm.points[0].velocities.resize(7);
         for (int i = 0; i < 7; i++) {

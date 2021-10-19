@@ -32,7 +32,7 @@
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
 
-    <node name="sensor_robot_at" type="robot_at_predicate_observation" pkg="test" output="screen">
+    <node name="sensor_robot_at" type="dummysensor_node" pkg="test" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="robot_at" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
@@ -56,6 +56,13 @@
     <node name="sensor_near" type="dummysensor_node" pkg="test" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="near" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_guest_not_near" type="guest_not_near_predicate_observation" pkg="test" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="guest_not_near" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>

@@ -11,9 +11,6 @@ namespace rosplane {
         pub_look_around_topic = nh.advertise<control_msgs::PointHeadActionGoal>("/head_controller/point_head_action/goal", 1);
         head_goal.joint_names.push_back("head_1_joint");
         head_goal.joint_names.push_back("head_2_joint");
-
-
-        
     }
 
 
@@ -33,22 +30,22 @@ namespace rosplane {
             }
         }
         // first goal
-        head_goal.points[0].positions[0] = -1.2;
+        head_goal.points[0].positions[0] = 0.0;
         head_goal.points[0].positions[1] = -0.7;
         head_goal.points[0].time_from_start = ros::Duration(2.0);
 
         // second goal
-        head_goal.points[1].positions[0] = 1.2;
+        head_goal.points[1].positions[0] = -1.2;
         head_goal.points[1].positions[1] = -0.7;
         head_goal.points[1].time_from_start = ros::Duration(8.0);
 
         // third goal
         head_goal.points[2].positions[0] = 1.2;
-        head_goal.points[2].positions[1] = 0.0;
+        head_goal.points[2].positions[1] = -0.7;
         head_goal.points[2].time_from_start = ros::Duration(10.0);
 
         // fouth goal
-        head_goal.points[3].positions[0] = -1.2;
+        head_goal.points[3].positions[0] = 0.0;
         head_goal.points[3].positions[1] = 0.0;
         head_goal.points[3].time_from_start = ros::Duration(16.0);
 
@@ -57,7 +54,7 @@ namespace rosplane {
 
         auto look_around_res = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose", ros::Duration(17.0));
 
-        ROS_INFO("debug");
+        ROS_INFO("Looking around.");
         if (look_around_res != nullptr) {
             // subscibe head pose
             try {

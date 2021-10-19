@@ -81,6 +81,10 @@ namespace KCL_rosplan {
         goal.target_pose = pose;
         action_client_.sendGoal(goal);
 
+        ros::ServiceClient look_around_client = nh_.serviceClient<std_srvs::Empty>("/look_around_interface/tiago_look_around");
+        std_srvs::Empty e;
+        look_around_client.call(e);
+
         bool finished_before_timeout = action_client_.waitForResult();
         if (finished_before_timeout) {
 

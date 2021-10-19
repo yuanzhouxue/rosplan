@@ -2,8 +2,6 @@
 <launch>
 
     <!-- ROSPlan turtlebot3 demo with ROSPlan -->
-
-    <arg name="map_file" default="$(find rosplan_turtlebot3_demo)/maps/playground.yaml" />
     <arg name="gazebo_gui" default="false" />
     <arg name="show_rviz" default="true" />
 
@@ -13,51 +11,20 @@
     <arg name="recording" default="false" />
 
     <arg name="use_moveit_camera" default="false"/>
+    <arg name="world" default="tabletop_cube" />
 
     <env name="LC_NUMERIC" value="C" />
 
     <!-- Gazebo simulation -->
-    <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
+    <include file="$(find test)/launch/sublaunch/tiago/tiago_gazebo.launch">
         <arg name="robot" value="$(arg robot)" />
         <arg name="public_sim" value="$(arg public_sim)" />
-        <arg name="world" value="tiago_pick_nav" />
+        <arg name="world" value="$(arg world)" />
         <arg name="gui" value="$(arg gazebo_gui)" />
         <arg name="recording" value="$(arg recording)" />
         <arg name="use_moveit_camera" value="$(arg use_moveit_camera)"/>
         <arg name="tuck_arm" default="true"/>
     </include>
-
-    <!-- roadmap (random waypoint generation) -->
-    <include file="$(find rosplan_interface_mapping)/launch/rosplan_roadmap_server.launch" />
-
-
-
-    <!-- rosplan move base action interface, makes link between rosplan dispatcher and hardware -->
-    <!-- <node pkg="rosplan_interface_movebase" type="rpmovebase" name="rosplan_interface_movebase" respawn="false" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="action_server" value="/move_base" />
-        <param name="pddl_action_name" value="goto_waypoint" />
-        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
-        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
-    </node> -->
-
-    <!-- <node pkg="rosplane" type="simulated_movebase_node" name="simulated_movebase_action" respawn="false" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="action_server" value="/move_base" />
-        <param name="pddl_action_name" value="goto_waypoint" />
-        <param name="probility" value="0.7" />
-        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
-        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
-    </node> -->
-
-    <!-- <node name="observe_action_interface" pkg="test" type="observe_action_node" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pddl_action_name" value="observing" />
-        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
-        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
-    </node> -->
-
-    <!-- <node name="look_around_interface" pkg="test" type="look_around_node" output="screen"> -->
 
     <!-- visualisation of robot sensor data -->
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosplan_turtlebot3_demo)/config/turtlebot3.rviz" if="$(arg show_rviz)" /> -->

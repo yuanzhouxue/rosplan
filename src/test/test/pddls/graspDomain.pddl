@@ -3,7 +3,7 @@
 (define (domain graspDomain)
 
     ;remove requirements that are not needed
-    (:requirements :strips :fluents :durative-actions :timed-initial-literals :typing :conditional-effects :negative-preconditions :duration-inequalities :equality)
+    (:requirements :durative-actions :typing)
 
     (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
         glass table waypoint
@@ -18,6 +18,7 @@
         (on_table ?g - glass ?t - table)
         (robot_at ?wp - waypoint)
         (near ?wp - waypoint ?t - table)
+        (guest_not_near)
     )
 
     (:functions ;todo: define numeric functions here
@@ -47,6 +48,7 @@
             (over all (robot_at ?wp))
             (over all (near ?wp ?t))
             (at start (in_hand ?g))
+            (at start (guest_not_near))
         )
         :effect (and
             (at end (not (in_hand ?g)))

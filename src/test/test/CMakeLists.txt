@@ -19,6 +19,9 @@ find_package(catkin REQUIRED COMPONENTS
     image_transport
     cv_bridge
     move_base_msgs
+    sensor_msgs
+    pcl_conversions
+    pcl_ros
 )
 
 find_package(OpenCV REQUIRED COMPONENTS
@@ -60,8 +63,7 @@ find_package(OpenCV REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 # add_message_files(
 #   FILES
-#   Message1.msg
-#   Message2.msg
+  
 # )
 
 ## Generate services in the 'srv' folder
@@ -117,7 +119,7 @@ catkin_package(
     INCLUDE_DIRS include
     # LIBRARIES test
     CATKIN_DEPENDS rosplan_planning_system
-    DEPENDS
+    DEPENDS roscpp std_msgs
 )
 
 ###########
@@ -155,6 +157,10 @@ target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
 add_executable(pickup_action_node src/ActionInterface/PickUpAction.cpp)
 target_link_libraries(pickup_action_node ${catkin_LIBRARIES})
 
+add_executable(segment_table src/segment_table.cpp)
+target_link_libraries(segment_table ${catkin_LIBRARIES})
+
+
 add_executable(place_action_node src/ActionInterface/PlaceAction.cpp)
 target_link_libraries(place_action_node ${catkin_LIBRARIES})
 
@@ -169,6 +175,9 @@ target_link_libraries(inhand_predicate_observation ${catkin_LIBRARIES} ${OpenCV_
 
 add_executable(robot_at_predicate_observation src/SensorInterface/RobotAtPredicateObservation.cpp)
 target_link_libraries(robot_at_predicate_observation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(guest_not_near_predicate_observation src/SensorInterface/GuestNotNearSensorInterface.cpp)
+target_link_libraries(guest_not_near_predicate_observation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(rpmovebase src/ActionInterface/RPMoveBase.cpp)
 target_link_libraries(rpmovebase ${catkin_LIBRARIES})

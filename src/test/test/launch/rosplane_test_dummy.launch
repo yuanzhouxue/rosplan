@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <launch>
-    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch"/>
-    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback"/>
 
-    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch"/>
-    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback"/>
+    <arg name="dummynode" default="true" />
+
+    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch" />
+    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback" />
+
+    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch" />
+    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback" />
 
     <!-- rosbridge -->
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 
     <!-- rosplan & rosplane framework -->
     <!-- ROSPlan -->
@@ -24,53 +25,56 @@
         <arg name="data_path" value="$(find test)/output/" />
     </include>
 
-    
-    <node name="sensor_in_hand" type="dummysensor_node" pkg="test" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pred_name" value="in_hand" />
-        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
-        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+    <group if="$(arg dummynode)">
+        <node name="sensor_in_hand" type="dummysensor_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pred_name" value="in_hand" />
+            <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+            <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+        </node>
 
-    <node name="sensor_emptyhand" type="dummysensor_node" pkg="test" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pred_name" value="emptyhand" />
-        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
-        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+        <node name="sensor_emptyhand" type="dummysensor_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pred_name" value="emptyhand" />
+            <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+            <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+        </node>
 
-    <node name="sensor_on_table" type="dummysensor_node" pkg="test" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pred_name" value="on_table" />
-        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
-        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+        <node name="sensor_on_table" type="dummysensor_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pred_name" value="on_table" />
+            <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+            <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+        </node>
 
-    <node name="sensor_robot_at" type="dummysensor_node" pkg="test" output="screen">
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pred_name" value="robot_at" />
-        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
-        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+        <node name="sensor_robot_at" type="dummysensor_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pred_name" value="robot_at" />
+            <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+            <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+        </node>
 
-    <node name="action_grasp" type="dummyaction_node" pkg="test" output="screen" >
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pddl_action_name" value="pick" />
-        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
-        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
-    </node>
+        <node name="action_grasp" type="dummyaction_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pddl_action_name" value="pick" />
+            <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+            <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+        </node>
 
-    <node name="action_place" type="dummyaction_node" pkg="test" output="screen" >
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pddl_action_name" value="place" />
-        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
-        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
-    </node>
+        <node name="action_place" type="dummyaction_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pddl_action_name" value="place" />
+            <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+            <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+        </node>
 
-    <node name="action_goto_waypoint" type="dummyaction_node" pkg="test" output="screen" >
-        <param name="knowledge_base" value="rosplan_knowledge_base" />
-        <param name="pddl_action_name" value="goto_waypoint" />
-        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
-        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
-    </node>
+        <node name="action_goto_waypoint" type="dummyaction_node" pkg="test" output="screen">
+            <param name="knowledge_base" value="rosplan_knowledge_base" />
+            <param name="pddl_action_name" value="goto_waypoint" />
+            <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+            <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+        </node>
+    </group>
+
+
 </launch>
