@@ -49,7 +49,7 @@ namespace rosplane {
         actionlib::SimpleActionClient<play_motion_msgs::PlayMotionAction> play_m_as;
         actionlib::SimpleActionClient<tiago_pick_demo::PickUpPoseAction> place_as;
 
-        ros::Publisher torso_cmd, head_cmd, detected_pos_pub, gripper_cmd;
+        ros::Publisher torso_cmd, head_cmd, detected_pos_pub, gripper_cmd, pub_arm_topic;
 
         // to clear costmaps if move base gets stuck
         ros::ServiceClient clear_costmaps_client_;

@@ -59,6 +59,7 @@
     <exec_depend>python3-numpy</exec_depend>
     <exec_depend>rosplan_knowledge_msgs</exec_depend>
     <depend>rosplan_planning_system</depend>
+    <depend>moveit_ros_planning_interface</depend>
     <build_depend>tiago_pick_demo</build_depend>
     <!-- python3-rospkg与其他ros软件包不兼容，只能手动使用pip3安装 -->
     <!-- <exec_depend>python3-rospkg</exec_depend> -->

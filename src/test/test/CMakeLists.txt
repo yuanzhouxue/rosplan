@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
     sensor_msgs
     pcl_conversions
     pcl_ros
+    moveit_ros_planning_interface
 )
 
 find_package(OpenCV REQUIRED COMPONENTS

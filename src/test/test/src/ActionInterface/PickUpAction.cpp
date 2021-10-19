@@ -169,13 +169,13 @@ namespace rosplane {
         // }
         auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/gripper_controller/state");
         ROS_INFO("(%s): actual[0]: %.4f, desired[0]: %.4f, actual[1]: %.4f, desired[1]: %.4f", node_name.c_str(), res->actual.positions[0], res->desired.positions[0], res->actual.positions[1], res->desired.positions[1]);
-        // if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
-        //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
-        //     ros::ServiceClient _plan_dispatch_cancel_client = nh_.serviceClient<std_srvs::Empty>("/rosplan_plan_dispatcher/cancel_dispatch");
-        //     std_srvs::Empty empty;
-        //     _plan_dispatch_cancel_client.call(empty);
-        //     return false;
-        // }
+        if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
+            ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
+            // ros::ServiceClient _plan_dispatch_cancel_client = nh_.serviceClient<std_srvs::Empty>("/rosplan_plan_dispatcher/cancel_dispatch");
+            // std_srvs::Empty empty;
+            // _plan_dispatch_cancel_client.call(empty);
+            return false;
+        }
 
         liftTorso();
         ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());
