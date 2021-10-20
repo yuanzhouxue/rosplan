@@ -1,4 +1,5 @@
 #include "ActionInterface/PlaceAction.h"
+#include <moveit/move_group_interface/move_group_interface.h>
 
 #define INFO(...) ROS_INFO(__VA_ARGS__)
 
@@ -17,6 +18,7 @@ namespace rosplane {
         update_knowledge_client_ = nh_.serviceClient<KnowledgeUpdateService>("/rosplan_knowledge_base/update");
         update_knowledge_array_client_ = nh_.serviceClient<KnowledgeUpdateServiceArray>("/rosplan_knowledge_base/update_array");
         query_knowledge_client_ = nh_.serviceClient<GetInstanceService>("/rosplan_knowledge_base/state/instances");
+        pub_arm_topic = nh_.advertise<trajectory_msgs::JointTrajectory>("/arm_controller/command", 1);
         ROS_INFO("(%s): Initalizing...", node_name.c_str());
         // auto tfBuffer = tf2_ros::Buffer();
         // tf2_ros::TransformListener tf_l(tfBuffer);
@@ -98,26 +100,53 @@ namespace rosplane {
 
     /* action dispatch callback */
     bool PlaceAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-
         liftTorso();
-        tiago_pick_demo::PickUpPoseGoal pick_g;
-        pick_g.object_pose.pose.position.x = 0.5;
-        pick_g.object_pose.pose.position.y = -0.05;
-        pick_g.object_pose.pose.position.z = 1.0;
+        geometry_msgs::PoseStamped goal_pose;
+        goal_pose.header.frame_id = "base_footprint";
+        goal_pose.pose.position.x = 0.5f;
+        goal_pose.pose.position.y = 0.0f;
+        goal_pose.pose.position.z = 1.0f;
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
+        std::vector<std::string> torso_arm_joint_names;
+        //select group of joints
+        moveit::planning_interface::MoveGroupInterface group_arm_torso("arm_torso");
+        //choose your preferred planner
+        group_arm_torso.setPlannerId("SBLkConfigDefault");
+        group_arm_torso.setPoseReferenceFrame("base_footprint");
+        group_arm_torso.setPoseTarget(goal_pose);
+
+        ROS_INFO_STREAM("Planning to move " <<
+            group_arm_torso.getEndEffectorLink() << " to a target pose expressed in " <<
+            group_arm_torso.getPlanningFrame());
+
+        group_arm_torso.setStartStateToCurrentState();
+        group_arm_torso.setMaxVelocityScalingFactor(1.0);
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        //set maximum time to find a plan
+        group_arm_torso.setPlanningTime(5.0);
+        bool success = bool(group_arm_torso.plan(my_plan));
+
+        if (!success)
+            throw std::runtime_error("No plan found");
+
+        ROS_INFO_STREAM("Plan found in " << my_plan.planning_time_ << " seconds");
 
         ROS_INFO("(%s): Gonna place the object on the table.", ros::this_node::getName().c_str());
-        pick_g.object_pose.pose.position.z += 0.05;
-        place_as.sendGoalAndWait(pick_g);
+        // Execute the plan
+        ros::Time start = ros::Time::now();
+        moveit::planning_interface::MoveItErrorCode e = group_arm_torso.move();
+        if (!bool(e))
+            throw std::runtime_error("Error executing plan");
+        ROS_INFO_STREAM("Motion duration: " << (ros::Time::now() - start).toSec());
         ROS_INFO("(%s): Done.", ros::this_node::getName().c_str());
-
         trajectory_msgs::JointTrajectory jt;
         jt.joint_names = { "gripper_left_finger_joint", "gripper_right_finger_joint" };
         trajectory_msgs::JointTrajectoryPoint jtp;
         jtp.positions = { 0.044, 0.044 };
         jtp.time_from_start = ros::Duration(1.0);
         jt.points.push_back(jtp);
-        head_cmd.publish(jt);
-
+        gripper_cmd.publish(jt);
+        ros::Duration(2.0).sleep();
         return true;
     }
 

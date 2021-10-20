@@ -47,7 +47,7 @@
         :condition (and
             (over all (robot_at ?wp))
             (over all (near ?wp ?t))
-            (at start (in_hand ?g))
+            (over all (in_hand ?g))
             (at start (guest_not_near))
         )
         :effect (and

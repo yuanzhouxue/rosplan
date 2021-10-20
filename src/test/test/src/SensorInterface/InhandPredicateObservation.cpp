@@ -165,7 +165,7 @@ namespace rosplane {
         
         take_back_arm.points[0].time_from_start = ros::Duration(12.0);
         take_back_arm.header.stamp = ros::Time::now();
-        // pub_arm_topic.publish(take_back_arm);
+        pub_arm_topic.publish(take_back_arm);
         
 
         if (observe_flag) {
