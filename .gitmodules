@@ -4,3 +4,9 @@
 [submodule "src/tiago_dependencies"]
 	path = src/tiago_dependencies
 	url = https://gitee.com/yuanzhouxue/tiago.git
+[submodule "src/turtlebot3_dependencies/turtlebot3_msgs"]
+	path = src/turtlebot3_dependencies/turtlebot3_msgs
+	url = https://gitee.com/yuanzhouxue/turtlebot3_msgs.git
+[submodule "src/turtlebot3_dependencies/turtlebot3"]
+	path = src/turtlebot3_dependencies/turtlebot3
+	url = https://gitee.com/yuanzhouxue/turtlebot3.git
