@@ -1,7 +1,0 @@
-<library path="lib/libxyz_nav">
-  <class name="xyz_nav/NavfnROS" type="xyz_nav::NavfnROS" base_class_type="nav_core::BaseGlobalPlanner">
-    <description>
-      A implementation of a grid based planner using A*, modified by xyz to add smooth A* algorithm
-    </description>
-  </class>
-</library>

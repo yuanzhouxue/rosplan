@@ -1,0 +1,66 @@
+{
+    "op": {
+        "over_all_simple_condition": [],
+        "at_end_simple_condition": [],
+        "at_start_comparison": [],
+        "at_end_del_effects": [],
+        "at_end_add_effects": [
+            {
+                "name": "observe",
+                "typed_parameters": []
+            }
+        ],
+        "over_all_comparison": [],
+        "at_end_neg_condition": [],
+        "at_start_assign_effects": [],
+        "at_start_del_effects": [
+            {
+                "name": "finish_observe",
+                "typed_parameters": []
+            }
+        ],
+        "over_all_neg_condition": [],
+        "at_end_comparison": [],
+        "at_start_add_effects": [],
+        "at_start_neg_condition": [],
+        "formula": {
+            "name": "grasp",
+            "typed_parameters": [
+                {
+                    "value": "cup",
+                    "key": "c"
+                },
+                {
+                    "value": "desk",
+                    "key": "d"
+                }
+            ]
+        },
+        "probabilistic_effects": [],
+        "at_start_simple_condition": [
+            {
+                "name": "not_inhand",
+                "typed_parameters": [
+                    {
+                        "value": "cup",
+                        "key": "c"
+                    }
+                ]
+            },
+            {
+                "name": "ondesk",
+                "typed_parameters": [
+                    {
+                        "value": "desk",
+                        "key": "d"
+                    },
+                    {
+                        "value": "cup",
+                        "key": "c"
+                    }
+                ]
+            }
+        ],
+        "at_end_assign_effects": []
+    }
+}

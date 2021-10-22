@@ -1,6 +1,0 @@
-0.000: (goto_waypoint kenny wp0 wp0)  [1.000]
-1.001: (goto_waypoint kenny wp0 wp1)  [1.000]
-2.002: (goto_waypoint kenny wp1 wp2)  [1.000]
-3.003: (goto_waypoint kenny wp2 wp3)  [1.000]
-4.004: (goto_waypoint kenny wp3 wp4)  [1.000]
-5.005: (goto_waypoint kenny wp4 wp5)  [1.000]

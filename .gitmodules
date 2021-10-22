@@ -2,5 +2,5 @@
 	path = src/ROSPlan
 	url = https://gitee.com/yuanzhouxue/ROSPlan.git
 [submodule "src/tiago"]
-	path = src/tiago
+	path = src/tiago_depedencies
 	url = https://gitee.com/yuanzhouxue/tiago.git
