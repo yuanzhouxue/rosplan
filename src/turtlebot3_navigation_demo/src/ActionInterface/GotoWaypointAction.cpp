@@ -1,6 +1,6 @@
 #include <ActionInterface/GotoWaypointAction.h>
 
-int main(int argc, char const* argv[]) {
+int main(int argc, char** argv) {
     /* code */
     return 0;
 }
