@@ -1,4 +1,4 @@
-#include "ActionInterface/RPMoveBase.h"
+#include "ActionInterface/GotoWaypointAction.h"
 
 namespace turtlebot3_navigation_demo {
 
