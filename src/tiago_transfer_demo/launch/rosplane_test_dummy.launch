@@ -14,61 +14,61 @@
 
     <!-- rosplan & rosplane framework -->
     <!-- ROSPlan -->
-    <include file="$(find rosplane)/launch/rosplane_interfaced_planning_system.launch">
-        <arg name="domain_path" value="$(find test)/pddls/graspDomain.pddl" />
+    <include file="$(find rosplan_planning_system)/launch/rosplane_interfaced_planning_system_old.launch">
+        <arg name="domain_path" value="$(find tiago_transfer_demo)/pddls/graspDomain.pddl" />
         <!-- load a particular initial state into KB at startup (optional) -->
         <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
-        <arg name="problem_path" value="$(find test)/pddls/graspProblem.pddl" />
+        <arg name="problem_path" value="$(find tiago_transfer_demo)/pddls/graspProblem.pddl" />
         <!-- automatically generated pddl problem will be created here -->
-        <arg name="autom_gen_problem_path" value="$(find test)/output/graspProblem_autogen.pddl" />
+        <arg name="autom_gen_problem_path" value="$(find tiago_transfer_demo)/output/autogen.pddl" />
         <!-- planner will produce output plan and write to this location -->
-        <arg name="data_path" value="$(find test)/output/" />
+        <arg name="data_path" value="$(find tiago_transfer_demo)/output/" />
     </include>
 
     <group if="$(arg dummynode)">
-        <node name="sensor_in_hand" type="dummysensor_node" pkg="test" output="screen">
+        <node name="sensor_in_hand" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pred_name" value="in_hand" />
             <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
             <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
         </node>
 
-        <node name="sensor_emptyhand" type="dummysensor_node" pkg="test" output="screen">
+        <node name="sensor_emptyhand" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pred_name" value="emptyhand" />
             <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
             <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
         </node>
 
-        <node name="sensor_on_table" type="dummysensor_node" pkg="test" output="screen">
+        <node name="sensor_on_table" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pred_name" value="on_table" />
             <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
             <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
         </node>
 
-        <node name="sensor_robot_at" type="dummysensor_node" pkg="test" output="screen">
+        <node name="sensor_robot_at" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pred_name" value="robot_at" />
             <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
             <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
         </node>
 
-        <node name="action_grasp" type="dummyaction_node" pkg="test" output="screen">
+        <node name="action_grasp" type="dummyaction_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pddl_action_name" value="pick" />
             <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
             <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
         </node>
 
-        <node name="action_place" type="dummyaction_node" pkg="test" output="screen">
+        <node name="action_place" type="dummyaction_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pddl_action_name" value="place" />
             <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
             <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
         </node>
 
-        <node name="action_goto_waypoint" type="dummyaction_node" pkg="test" output="screen">
+        <node name="action_goto_waypoint" type="dummyaction_node" pkg="rosplan_planning_system" output="screen">
             <param name="knowledge_base" value="rosplan_knowledge_base" />
             <param name="pddl_action_name" value="goto_waypoint" />
             <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />

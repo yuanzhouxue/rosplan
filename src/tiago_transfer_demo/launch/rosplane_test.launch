@@ -13,7 +13,7 @@
 
     <!-- rosplan & rosplane framework -->
     <!-- ROSPlan -->
-    <include file="$(find rosplan_planning_system)/launch/rosplan_interfaced_planning_system_old.launch">
+    <include file="$(find rosplan_planning_system)/launch/rosplane_interfaced_planning_system_old.launch">
         <arg name="domain_path" value="$(find tiago_transfer_demo)/pddls/graspDomain.pddl" />
         <!-- load a particular initial state into KB at startup (optional) -->
         <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
