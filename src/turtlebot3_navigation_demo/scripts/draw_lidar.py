@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from sensor_msgs.msg import LaserScan
 import numpy as np
 from queue import Queue
-import tf2_py
 
 q = Queue(10)
 

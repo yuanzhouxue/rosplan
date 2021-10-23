@@ -15,9 +15,7 @@
     <!-- ROSPlan -->
     <include file="$(find rosplan_planning_system)/launch/rosplane_interfaced_planning_system_old.launch">
         <arg name="domain_path" value="$(find turtlebot3_navigation_demo)/pddls/turtlebotNavDomain.pddl" />
-        <!-- load a particular initial state into KB at startup (optional) -->
-        <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
-        <arg name="problem_path" value="$(find teturtlebot3_navigation_demost)/pddls/turtlebotNavProblem.pddl" />
+        <arg name="problem_path" value="$(find turtlebot3_navigation_demo)/pddls/turtlebotNavProblem.pddl" />
         <!-- automatically generated pddl problem will be created here -->
         <arg name="autom_gen_problem_path" value="$(find turtlebot3_navigation_demo)/output/turtlbotNavProblem_autogen.pddl" />
         <!-- planner will produce output plan and write to this location -->
@@ -31,14 +29,14 @@
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
 
-    <node name="sensor_visited" type="visited_predicate_observation" pkg="turtlebot3_navigation_demo" output="screen">
+    <node name="sensor_visited" type="visited_sensor" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="visited" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
 
-    <node name="action_goto_waypoint" type="rpmovebase" pkg="turtlebot3_navigation_demo" output="screen">
+    <node name="action_goto_waypoint" type="goto_waypoint_action" pkg="turtlebot3_navigation_demo" output="screen">
         <rosparam file="$(find turtlebot3_navigation_demo)/config/waypoints.yaml" command="load" />
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="wp_namespace" value="/action_goto_waypoint/turtlebot3_navigation_demo_waypoints" />

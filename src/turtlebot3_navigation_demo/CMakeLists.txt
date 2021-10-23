@@ -10,11 +10,15 @@ project(turtlebot3_navigation_demo)
 find_package(catkin REQUIRED
     roscpp
     rosplan_planning_system
+    image_transport
+    cv_bridge
+    move_base_msgs
+    sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(OpenCV 3 REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -117,6 +121,7 @@ catkin_package(
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -137,7 +142,7 @@ target_link_libraries(goto_waypoint_action ${catkin_LIBRARIES})
 
 
 add_executable(visited_sensor src/SensorInterface/VisitedSensor.cpp)
-target_link_libraries(visited_sensor ${catkin_LIBRARIES})
+target_link_libraries(visited_sensor ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

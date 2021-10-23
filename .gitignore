@@ -2,7 +2,7 @@ devel
 build
 install
 logs
-src/test/test/output/**
+src/*_demo/output/**
 .catkin_tools
 .catkin_workspace
 *.class
