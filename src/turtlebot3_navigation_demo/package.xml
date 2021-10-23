@@ -51,6 +51,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>rosplan_planning_system</depend>
   <depend>roscpp</depend>
+  <depend>turtlebot3_msgs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

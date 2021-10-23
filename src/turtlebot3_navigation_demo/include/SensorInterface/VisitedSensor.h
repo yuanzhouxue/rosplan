@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/aruco.hpp>
 #include <geometry_msgs/Twist.h>
+#include <turtlebot3_msgs/Sound.h>
 
 namespace turtlebot3_navigation_demo {
     class VisitedSensorInterface : public KCL_rosplan::SensorInterface {
@@ -13,7 +14,7 @@ namespace turtlebot3_navigation_demo {
         image_transport::Subscriber imgSub;
         image_transport::Publisher markerImagePub;
         ros::Subscriber cam_info_sub;
-        ros::Publisher cmd_vel_pub;
+        ros::Publisher cmd_vel_pub, sound_pub;
         bool arucoFound;
         bool rotateRobot(float angular_vel);
         bool detectAruco(const cv::Mat& img);

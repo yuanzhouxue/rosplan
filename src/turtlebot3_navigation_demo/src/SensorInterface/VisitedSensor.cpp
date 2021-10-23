@@ -11,6 +11,7 @@ namespace turtlebot3_navigation_demo {
         markerImagePub = _it.advertise("/marker_image", 1);
         string vel_topic = _nh.param<string>("cmd_vel_topic", "/cmd_vel");
         cmd_vel_pub = _nh.advertise<geometry_msgs::Twist>(vel_topic, 1);
+        sound_pub = _nh.advertise<turtlebot3_msgs::Sound>("/sound", 1);
     }
 
     bool VisitedSensorInterface::rotateRobot(float angular_vel) {
@@ -45,14 +46,19 @@ namespace turtlebot3_navigation_demo {
 
     bool VisitedSensorInterface::concreteCallback(const rosplan_dispatch_msgs::SensorDispatchConstPtr& msg) {
         ros::Time start = ros::Time::now();
-        rotateRobot(0.5f);
+        rotateRobot(1.0f);
         bool found = false;
+        turtlebot3_msgs::Sound s;
+        s.value = turtlebot3_msgs::Sound::ON;
         do {
-            while (ros::Time::now() - start < ros::Duration(4 * 3.1415926)) {
+            while (ros::Time::now() - start < ros::Duration(2 * 3.1415926)) {
                 if (arucoFound) {
+                    /** 发布声音话题之后，需要等待声音播放完毕之后turtlebot才会响应其他消息。所以下面一行会导致机器人看到aruco之后会立即播放声音，声音播放完毕之后才能停下来。 */
+                    // sound_pub.publish(s);
                     found = true;
                     break;
                 }
+                ros::Duration(0.01).sleep();
             }
         } while (0);
         rotateRobot(0.0f);
