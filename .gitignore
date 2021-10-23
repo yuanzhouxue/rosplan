@@ -3,6 +3,7 @@ build
 install
 logs
 src/*_demo/output/**
+!src/*_demo/output/.gitkeep
 .catkin_tools
 .catkin_workspace
 *.class
