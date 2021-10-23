@@ -1,0 +1,7 @@
+turtlebot3_navigation_demo_waypoints:
+    # waypoints reference frame
+    waypoint_frameid: map
+
+    # waypoint 2D coordinates: x, y, theta
+    wp0: [-2.7, 0.40, 1.560796326]
+    wp1: [-1.2, -10.5, 3.141592653]
