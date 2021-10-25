@@ -53,8 +53,8 @@ namespace turtlebot3_navigation_demo {
         do {
             while (ros::Time::now() - start < ros::Duration(2 * 3.1415926)) {
                 if (arucoFound) {
-                    /** 发布声音话题之后，需要等待声音播放完毕之后turtlebot才会响应其他消息。所以下面一行会导致机器人看到aruco之后会立即播放声音，声音播放完毕之后才能停下来。 */
-                    // sound_pub.publish(s);
+                    rotateRobot(0.0f);
+                    sound_pub.publish(s);
                     found = true;
                     break;
                 }
