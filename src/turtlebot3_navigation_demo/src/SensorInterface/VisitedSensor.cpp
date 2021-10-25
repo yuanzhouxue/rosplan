@@ -46,21 +46,23 @@ namespace turtlebot3_navigation_demo {
 
     bool VisitedSensorInterface::concreteCallback(const rosplan_dispatch_msgs::SensorDispatchConstPtr& msg) {
         ros::Time start = ros::Time::now();
-        rotateRobot(1.0f);
         bool found = false;
         turtlebot3_msgs::Sound s;
         s.value = turtlebot3_msgs::Sound::ON;
-        do {
-            while (ros::Time::now() - start < ros::Duration(2 * 3.1415926)) {
-                if (arucoFound) {
-                    rotateRobot(0.0f);
-                    sound_pub.publish(s);
-                    found = true;
-                    break;
-                }
-                ros::Duration(0.01).sleep();
+        // 每次转动45度
+        float eachTurnInPi = 0.25f;
+        int turnRounds = 2.15 / eachTurnInPi;
+        for (int _ = 0; _ < turnRounds; ++_) {
+            rotateRobot(-0.5f);
+            ros::Duration(2 * 3.141592653589 * eachTurnInPi).sleep();
+            rotateRobot(0.0f);
+            ros::Duration(0.5).sleep();
+            if (arucoFound) {
+                sound_pub.publish(s);
+                found = true;
+                break;
             }
-        } while (0);
+        }
         rotateRobot(0.0f);
         return found;
     }

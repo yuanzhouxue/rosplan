@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find turtlebot3_navigation_demo)/launch/rosplane_test.launch" />
+    <include file="$(find turtlebot3_navigation_demo)/launch/turtlebot3_navigation.launch" />
+
+</launch>

@@ -10,3 +10,6 @@
 [submodule "src/turtlebot3_dependencies/turtlebot3"]
 	path = src/turtlebot3_dependencies/turtlebot3
 	url = https://gitee.com/yuanzhouxue/turtlebot3.git
+[submodule "src/turtlebot3_dependencies/turtlebot3_simulations"]
+	path = src/turtlebot3_dependencies/turtlebot3_simulations
+	url = https://gitee.com/yuanzhouxue/turtlebot3_simulations.git

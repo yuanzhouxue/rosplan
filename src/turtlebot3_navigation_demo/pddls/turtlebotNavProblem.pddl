@@ -2,7 +2,7 @@
     (:domain turtlebotNavDomain)
     (:objects
         v - robot
-        wp0 wp1 wp2 - waypoint
+        wp0 wp1 wp2 wp3 - waypoint
     )
 
     (:init
@@ -16,6 +16,7 @@
             ;todo: put the goal condition here
             (visited wp1)
             (visited wp2)
+            (visited wp3)
         )
     )
 
