@@ -162,9 +162,6 @@ target_link_libraries(segment_table ${catkin_LIBRARIES})
 add_executable(place_action_node src/ActionInterface/PlaceAction.cpp)
 target_link_libraries(place_action_node ${catkin_LIBRARIES})
 
-add_executable(observe_action_node src/ActionInterface/observe_action.cpp)
-target_link_libraries(observe_action_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
 add_executable(look_around_node src/ActionInterface/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
 

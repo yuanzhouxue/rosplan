@@ -5,7 +5,7 @@
     <arg name="set_frame_id" default="base_scan"/>
     
     <env name="ROSLAUNCH_SSH_UNKNOWN" value="1" />
-    <machine name="robot222" address="robot222.lan" user="robot" env-loader="/home/robot/remote_env.sh"/>
+    <machine name="robot222" address="robot222.lan" user="robot" password="0." env-loader="/home/robot/remote_env.sh"/>
 
     <node machine="robot222" pkg="rosserial_python" type="serial_node.py" name="turtlebot3_core" output="screen">
         <param name="port" value="/dev/ttyACM0" />
