@@ -10,7 +10,7 @@
     <arg name="downsampling_size" default="0.01" />
     <arg name="show_rviz" default="false" />
 
-    <node name="segment_table" pkg="test" type="segment_table" output="screen">
+    <node name="segment_table" pkg="tiago_transfer_demo" type="segment_table" output="screen">
         <remap from="cloud" to="$(arg cloud)" />
         <param name="rate" type="double" value="$(arg rate)" />
         <param name="frame" type="string" value="$(arg frame)" />
