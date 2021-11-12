@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ROSPlan -->
+    <include file="$(find rosplan_planning_system)/launch/interfaced_planning_system.launch">
+        <arg name="domain_path" value="$(find test)/pddls/domain_turtlebot_demo.pddl" />
+        <arg name="problem_path" value="$(find test)/pddls/turtlebot_problem.pddl" />
+        <arg name="data_path" value="$(find test)/output" />
+        <arg name="autom_gen_problem_path" value="$(find test)/output" />
+    </include>
+
+    <!-- sim actions -->
+    <!-- <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch">
+        <arg name="pddl_action_name" value="undock" />
+    </include>
+    <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch">
+        <arg name="pddl_action_name" value="dock" />
+    </include>
+    <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch">
+        <arg name="pddl_action_name" value="localise" />
+    </include> -->
+    <include file="$(find rosplan_planning_system)/launch/includes/simulated_action.launch">
+        <arg name="pddl_action_name" value="goto_waypoint" />
+        <arg name="action_duration" value="1"/>
+        <arg name="action_probability" value="0.8"/>
+    </include>
+
+    <!-- <node pkg="rosplane" type="simulated_movebase_node" name="" respawn="false" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="action_server" value="/move_base" />
+        <param name="pddl_action_name" value="goto_waypoint" />
+        <param name="action_dispatch_topic" value="/rosplan_plan_dispatcher/action_dispatch" />
+        <param name="action_feedback_topic" value="/rosplan_plan_dispatcher/action_feedback" />
+    </node> -->
+</launch>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<launch>
+    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch" />
+    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback" />
+
+    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch" />
+    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback" />
+
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+
+    <!-- rosplan & rosplane framework -->
+    <!-- ROSPlan -->
+    <include file="$(find rosplan_planning_system)/launch/rosplane_interfaced_planning_system_old.launch">
+        <arg name="domain_path" value="$(find ros_app)/pddls/graspDomain.pddl" />
+        <!-- load a particular initial state into KB at startup (optional) -->
+        <!-- we leave it empty because in this demo we use a bash script to upload information to KB, not a pddl problem -->
+        <arg name="problem_path" value="$(find ros_app)/pddls/graspProblem.pddl" />
+        <!-- automatically generated pddl problem will be created here -->
+        <arg name="autom_gen_problem_path" value="$(find ros_app)/output/graspProblem_autogen.pddl" />
+        <!-- planner will produce output plan and write to this location -->
+        <arg name="data_path" value="$(find ros_app)/output/" />
+    </include>
+
+
+    <node name="sensor_in_hand" type="inhand_predicate_observation" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="in_hand" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_robot_at" type="dummysensor_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="robot_at" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_on_table" type="dummysensor_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="on_table" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_emptyhand" type="dummysensor_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="emptyhand" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_near" type="dummysensor_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="near" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="sensor_guest_not_near" type="guest_not_near_predicate_observation" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="guest_not_near" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+
+    <node name="action_pick" type="pickup_action_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pddl_action_name" value="pick" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+
+    <node name="action_place" type="place_action_node" pkg="ros_app" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pddl_action_name" value="place" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+
+    <node name="action_goto_waypoint" type="rpmovebase" pkg="ros_app" output="screen">
+        <rosparam file="$(find ros_app)/config/waypoints.yaml" command="load" />
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="wp_namespace" value="/action_goto_waypoint/tiago_pick_nav_waypoints" />
+        <param name="pddl_action_name" value="goto_waypoint" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+
+    <include file="$(find ros_app)/launch/tiago_pick.launch">
+        <arg name="pddl_action_name" value="grasp" />
+    </include>
+
+</launch>

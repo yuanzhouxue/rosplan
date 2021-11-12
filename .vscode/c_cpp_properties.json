@@ -53,9 +53,12 @@
         "~/rosplan_ws/src/tiago_dependencies/tiago_tutorials/tiago_pcl_tutorial/include/**",
         "~/rosplan_ws/src/tiago_transfer_demo/include/**",
         "~/rosplan_ws/src/tiago_dependencies/ros_control/transmission_interface/include/**",
+        "~/rosplan_ws/src/turtlebot3_dependencies/turtlebot3_simulations/turtlebot3_fake/include/**",
+        "~/rosplan_ws/src/turtlebot3_dependencies/turtlebot3_simulations/turtlebot3_gazebo/include/**",
         "~/rosplan_ws/src/turtlebot3_navigation_demo/include/**",
         "~/rosplan_ws/src/turtlebot3_dependencies/turtlebot3/turtlebot3_slam/include/**",
         "~/rosplan_ws/src/tiago_dependencies/ros_controllers/velocity_controllers/include/**",
+        "~/rosplan_ws/src/ros_app/include/**",
         "/usr/include/**"
       ],
       "name": "ROS"

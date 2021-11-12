@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ROSPlan turtlebot3 demo with ROSPlan -->
+    <arg name="gazebo_gui" default="false" />
+    <arg name="show_rviz" default="true" />
+
+    <arg name="robot" default="steel" />
+    <arg name="public_sim" default="true" />
+    <!-- <arg name="gzclient" default="true" /> -->
+    <arg name="recording" default="false" />
+
+    <arg name="use_moveit_camera" default="false"/>
+    <arg name="world" default="tabletop_cube" />
+
+    <env name="LC_NUMERIC" value="C" />
+
+    <!-- Gazebo simulation -->
+    <include file="$(find test)/launch/sublaunch/tiago/tiago_gazebo.launch">
+        <arg name="robot" value="$(arg robot)" />
+        <arg name="public_sim" value="$(arg public_sim)" />
+        <arg name="world" value="$(arg world)" />
+        <arg name="gui" value="$(arg gazebo_gui)" />
+        <arg name="recording" value="$(arg recording)" />
+        <arg name="use_moveit_camera" value="$(arg use_moveit_camera)"/>
+        <arg name="tuck_arm" default="true"/>
+    </include>
+
+    <!-- visualisation of robot sensor data -->
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosplan_turtlebot3_demo)/config/turtlebot3.rviz" if="$(arg show_rviz)" /> -->
+    <group if="$(arg show_rviz)">
+        <node name="pick_demo_rviz" pkg="rviz" type="rviz" args="-d $(find tiago_pick_demo)/config/rviz/tiago_pick_demo.rviz" />
+    </group>
+
+</launch>
