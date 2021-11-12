@@ -35,6 +35,8 @@
 #include <control_msgs/QueryTrajectoryState.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
 
+#include <gazebo_msgs/GetModelState.h>
+
 
 using std::string;
 using std::vector;

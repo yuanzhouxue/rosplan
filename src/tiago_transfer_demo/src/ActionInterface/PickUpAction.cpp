@@ -18,8 +18,6 @@ namespace rosplane {
         // get waypoints reference frame from param server
         nh_.param<std::string>("waypoint_frameid", waypoint_frameid_, "map");
         nh_.param<std::string>("wp_namespace", wp_namespace_, "/rosplan_demo_waypoints/wp");
-        nh_.param<double>("probility", probility, 1.0);
-        // ROS_INFO("Simulated movebase with probility %lf", probility);
         // setup a move base clear costmap client (to be able to send clear costmap requests later on)
         clear_costmaps_client_ = nh_.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");
         update_knowledge_client_ = nh_.serviceClient<KnowledgeUpdateService>("/rosplan_knowledge_base/update");
@@ -134,35 +132,47 @@ namespace rosplane {
         action_client_.waitForResult();
         ROS_INFO("Turning robot done.");
 
-        aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
+        // aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
 
 
-        auto newFrameId = stripLeadingSlash(aruco_pose->header.frame_id);
-        geometry_msgs::PoseStamped ps;
-        ps.pose.position = aruco_pose->pose.position;
-        // TODO: I dont know what is tfBuffer.get_latest_common_time(...), so I used ros::Time::now() instead
-        ps.header.stamp = ros::Time::now();
-        ps.header.frame_id = newFrameId;
-        bool transformOK = false;
-        geometry_msgs::PoseStamped aruco_ps;
-        while (!transformOK && !ros::isShuttingDown()) {
-            try {
-                auto time = ros::Time::now();
-                while (!tfBuffer.canTransform(newFrameId, string("base_footprint"), time)) ros::Duration(0.01).sleep();
-                auto transform = tfBuffer.lookupTransform(string("base_footprint"), newFrameId, time);
-                tf2::doTransform(ps, aruco_ps, transform);
-                transformOK = true;
-            }
-            catch (exception e) {
-                ROS_WARN("(%s): Exception on transforming point... trying again \n(%s)", node_name.c_str(), e.what());
-                ros::Duration(0.01).sleep();
-                ps.header.stamp = ros::Time::now();
-            }
-        }
+        // auto newFrameId = stripLeadingSlash(aruco_pose->header.frame_id);
+        // geometry_msgs::PoseStamped ps;
+        // ps.pose.position = aruco_pose->pose.position;
+        // // TODO: I dont know what is tfBuffer.get_latest_common_time(...), so I used ros::Time::now() instead
+        // ps.header.stamp = ros::Time::now();
+        // ps.header.frame_id = newFrameId;
+        // bool transformOK = false;
+        // geometry_msgs::PoseStamped aruco_ps;
+        // while (!transformOK && !ros::isShuttingDown()) {
+        //     try {
+        //         auto time = ros::Time::now();
+        //         while (!tfBuffer.canTransform(newFrameId, string("base_footprint"), time)) ros::Duration(0.01).sleep();
+        //         auto transform = tfBuffer.lookupTransform(string("base_footprint"), newFrameId, time);
+        //         tf2::doTransform(ps, aruco_ps, transform);
+        //         transformOK = true;
+        //     }
+        //     catch (exception e) {
+        //         ROS_WARN("(%s): Exception on transforming point... trying again \n(%s)", node_name.c_str(), e.what());
+        //         ros::Duration(0.01).sleep();
+        //         ps.header.stamp = ros::Time::now();
+        //     }
+        // }
+
+        ros::ServiceClient get_aruco_state = nh_.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
+        gazebo_msgs::GetModelState get_model_state_srv;
+        get_model_state_srv.request.model_name = "aruco_cube_0";
+        get_model_state_srv.request.relative_entity_name = "base_footprint";
+        get_aruco_state.call(get_model_state_srv);
+        geometry_msgs::PoseStamped exact_aruco_pose;
+        exact_aruco_pose.pose = get_model_state_srv.response.pose;
+        
+        ROS_INFO("Aruco cube found");
+
+
         tiago_pick_demo::PickUpPoseGoal pick_g;
         ROS_INFO("(%s): Setting cube pose based on ArUco detection", node_name.c_str());
-        pick_g.object_pose.pose.position = aruco_ps.pose.position;
-        pick_g.object_pose.pose.position.z -= 0.1 * (1.0 / 2.0);
+        pick_g.object_pose.pose.position = exact_aruco_pose.pose.position;
+        // pick_g.object_pose.pose.position.z -= 0.1 * (1.0 / 2.0);
 
         ROS_INFO("(%s): aruco pose in base_footprint: %f, %f, %f", node_name.c_str(), pick_g.object_pose.pose.position.x, pick_g.object_pose.pose.position.y, pick_g.object_pose.pose.position.z);
         pick_g.object_pose.header.frame_id = "base_footprint";

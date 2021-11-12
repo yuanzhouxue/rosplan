@@ -34,7 +34,7 @@
             </attenuation>
             <direction>0.5 0.1 -0.9</direction>
         </light>
-        <actor name="actor">
+        <!-- <actor name="actor">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
                   0.01
@@ -169,7 +169,7 @@
                     </waypoint>
                 </trajectory>
             </script>
-        </actor>
+        </actor> -->
         <actor name="actor1">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
@@ -183,8 +183,8 @@
                   1.0
                 " />
                 <scaling collision="LeftLeg_LeftFoot_collision" scale="
-                  8.0
-                  8.0
+                  18.0
+                  18.0
                   1.0
                 " />
                 <scaling collision="LeftFoot_LeftToeBase_collision" scale="
@@ -203,8 +203,8 @@
                   1.0
                 " />
                 <scaling collision="RightLeg_RightFoot_collision" scale="
-                  8.0
-                  8.0
+                  18.0
+                  18.0
                   1.0
                 " />
                 <scaling collision="RightFoot_RightToeBase_collision" scale="
@@ -276,7 +276,7 @@
             <skin>
                 <filename>walk.dae</filename>
             </skin>
-            <pose>-3 -5.5 0 0 0 0</pose>
+            <pose>1.2 -5.5 0 0 0 0</pose>
             <animation name="walking">
                 <filename>walk.dae</filename>
                 <interpolate_x>true</interpolate_x>
@@ -285,31 +285,31 @@
                 <trajectory id="0" type="walking">
                     <waypoint>
                         <time>0</time>
-                        <pose>3 -5.5 0 0 0 -3.14</pose>
+                        <pose>0.5 -5.5 0 0 0 -1.57</pose>
                     </waypoint>
                     <waypoint>
                         <time>5.5</time>
-                        <pose>-3 -5.5 0 0 0 -3.14</pose>
+                        <pose>0.5 -8 0 0 0 -1.57</pose>
                     </waypoint>
                     <waypoint>
                         <time>6</time>
-                        <pose>-3.5 -5.5 0 0 0 -1.57</pose>
+                        <pose>0.5 -8.5 0 0 0 0</pose>
                     </waypoint>
                     <waypoint>
                         <time>6.5</time>
-                        <pose>-3 -5.5 0 0 0 0</pose>
+                        <pose>0.5 -8 0 0 0 1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>12</time>
+                        <pose>0.5 -5.5 0 0 0 1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>12.5</time>
+                        <pose>0.5 -5 0 0 0 0</pose>
                     </waypoint>
                     <waypoint>
                         <time>13</time>
-                        <pose>3 -5.5 0 0 0 0</pose>
-                    </waypoint>
-                    <waypoint>
-                        <time>13.5</time>
-                        <pose>3.5 -5.5 0 0 0 -1.57</pose>
-                    </waypoint>
-                    <waypoint>
-                        <time>14</time>
-                        <pose>3 -5.5 0 0 0 -3.14</pose>
+                        <pose>0.5 -5.5 0 0 0 -1.57</pose>
                     </waypoint>
                 </trajectory>
             </script>
@@ -1355,7 +1355,7 @@
                 <gravity>1</gravity>
                 <enable_wind>0</enable_wind>
             </link>
-            <pose frame=''>0.013749 -10.5679 0 0 -0 0</pose>
+            <pose frame=''>2.30864 -6.43188 -0.25 0 -0 0</pose>
         </model>
         <model name='table_1m_1'>
             <static>1</static>
@@ -1747,7 +1747,7 @@
                 <enable_wind>0</enable_wind>
                 <kinematic>0</kinematic>
             </link>
-            <pose frame=''>-2.67867 1.28669 0 0 -0 0</pose>
+            <pose frame=''>-2.67867 1.28669 -0.25 0 -0 0</pose>
         </model>
         <model name='citizen_extras_female_02'>
             <link name='link'>
@@ -2492,7 +2492,7 @@
                 <gravity>1</gravity>
                 <enable_wind>0</enable_wind>
             </link>
-            <pose frame=''>-1.95121 -7.39757 0 0 -0 0</pose>
+            <pose frame=''>-2.11863 -6.43188 -0.25 0 -0 0</pose>
         </model>
         <model name='arm_chair_clone_clone'>
             <static>1</static>
@@ -2760,7 +2760,7 @@
                 <gravity>1</gravity>
                 <enable_wind>0</enable_wind>
             </link>
-            <pose frame=''>-1.20208 0.333549 0 0 -0 0</pose>
+            <pose frame=''>-2.7 1.0 1.06 0 -0 0</pose>
         </model>
     </world>
 </sdf>

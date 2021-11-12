@@ -97,23 +97,13 @@ namespace rosplane {
         ROS_INFO("(%s): Lift torso done.", node_name.c_str());
     }
 
-
-    /* action dispatch callback */
-    bool PlaceAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-        liftTorso();
-        geometry_msgs::PoseStamped goal_pose;
-        goal_pose.header.frame_id = "base_footprint";
-        goal_pose.pose.position.x = 0.5f;
-        goal_pose.pose.position.y = 0.0f;
-        goal_pose.pose.position.z = 1.0f;
-        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
-        std::vector<std::string> torso_arm_joint_names;
+    bool PlaceAction::moveGripperTo(const geometry_msgs::PoseStamped& targetPose) {
         //select group of joints
         moveit::planning_interface::MoveGroupInterface group_arm_torso("arm_torso");
         //choose your preferred planner
         group_arm_torso.setPlannerId("SBLkConfigDefault");
         group_arm_torso.setPoseReferenceFrame("base_footprint");
-        group_arm_torso.setPoseTarget(goal_pose);
+        group_arm_torso.setPoseTarget(targetPose);
 
         ROS_INFO_STREAM("Planning to move " <<
             group_arm_torso.getEndEffectorLink() << " to a target pose expressed in " <<
@@ -126,19 +116,44 @@ namespace rosplane {
         group_arm_torso.setPlanningTime(5.0);
         bool success = bool(group_arm_torso.plan(my_plan));
 
-        if (!success)
-            throw std::runtime_error("No plan found");
+        if (!success) {
+            ROS_INFO("No plan found.");
+            return false;
+        }
 
         ROS_INFO_STREAM("Plan found in " << my_plan.planning_time_ << " seconds");
+        moveit::planning_interface::MoveItErrorCode e = group_arm_torso.move();
+        if (!bool(e)) ROS_ERROR("Failed to execute this plan.");
+        return bool(e);
+    }
+
+    // bool PlaceAction::moveArm(const )
+
+
+    /* action dispatch callback */
+    bool PlaceAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
+        liftTorso();
+
+        // 放物体的位置
+        geometry_msgs::PoseStamped goal_pose;
+        goal_pose.header.frame_id = "base_footprint";
+        goal_pose.pose.position.x = 0.5f;
+        goal_pose.pose.position.y = 0.0f;
+        goal_pose.pose.position.z = 1.0f;
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
+
 
         ROS_INFO("(%s): Gonna place the object on the table.", ros::this_node::getName().c_str());
         // Execute the plan
         ros::Time start = ros::Time::now();
-        moveit::planning_interface::MoveItErrorCode e = group_arm_torso.move();
-        if (!bool(e))
-            throw std::runtime_error("Error executing plan");
+        if (!moveGripperTo(goal_pose)) {
+            ROS_ERROR("Failed to move gripper. Failed to execute place action.");
+            return false;
+        }
         ROS_INFO_STREAM("Motion duration: " << (ros::Time::now() - start).toSec());
         ROS_INFO("(%s): Done.", ros::this_node::getName().c_str());
+
+        // 松开gripper
         trajectory_msgs::JointTrajectory jt;
         jt.joint_names = { "gripper_left_finger_joint", "gripper_right_finger_joint" };
         trajectory_msgs::JointTrajectoryPoint jtp;
@@ -146,7 +161,35 @@ namespace rosplane {
         jtp.time_from_start = ros::Duration(1.0);
         jt.points.push_back(jtp);
         gripper_cmd.publish(jt);
-        ros::Duration(2.0).sleep();
+        ros::Duration(1.0).sleep();
+
+        // 移开手
+        ROS_INFO("Let it go.");
+        goal_pose.pose.position.x = 0.5f;
+        goal_pose.pose.position.y = 0.0f;
+        goal_pose.pose.position.z = 1.1f;
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
+        moveGripperTo(goal_pose);
+        ROS_INFO("Move arm away");
+        goal_pose.pose.position.x = 0.15f;
+        goal_pose.pose.position.y = -0.6f;
+        goal_pose.pose.position.z = 1.0f;
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(0.0, 1.57f, 0.f);
+        moveGripperTo(goal_pose);
+
+        trajectory_msgs::JointTrajectory arm_traj;
+        arm_traj.joint_names = { "arm_1_joint", "arm_2_joint", "arm_3_joint", "arm_4_joint", "arm_5_joint", "arm_6_joint", "arm_7_joint" };
+        trajectory_msgs::JointTrajectoryPoint arm_jtp, arm_jtp1;
+        arm_jtp.positions = { 0.17, 0.16, -0.09, 1.30, -1.58, 1.39, -0.12 };
+        arm_jtp.time_from_start = ros::Duration(2.0);
+        
+        arm_traj.points.push_back(arm_jtp);
+
+        arm_jtp1.positions = { 0.17, -1.5, -0.09, 1.61, -1.58, 1.39, -0.12 };
+        arm_jtp1.time_from_start = ros::Duration(3.5);
+        arm_traj.points.push_back(arm_jtp1);
+        pub_arm_topic.publish(arm_traj);
+        ros::Duration(3.5).sleep();
         return true;
     }
 

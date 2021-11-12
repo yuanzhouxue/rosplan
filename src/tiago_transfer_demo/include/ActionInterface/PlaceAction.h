@@ -77,6 +77,7 @@ namespace rosplane {
         void prepareRobot();
         void lowerHead();
         void liftTorso();
+        bool moveGripperTo(const geometry_msgs::PoseStamped& targetPose);
         bool callback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
 
     public:

@@ -55,6 +55,8 @@ from moveit_msgs.srv import (
 )
 from std_srvs.srv import Empty, EmptyRequest
 from std_msgs.msg import Float32MultiArray
+from gazebo_msgs.srv import GetModelState, GetModelStateRequest, GetModelStateResponse
+
 from copy import deepcopy
 from random import shuffle
 import copy
@@ -241,15 +243,24 @@ class PickAndPlaceServer(object):
             table_pose.pose.position.z = table_height / 2
         except ROSException as e:
             table_height = object_pose.pose.position.z - self.object_width / 2
-            table_width = 1.8
-            table_depth = 1.0
+            table_width = 1.0
+            table_depth = 1.8
             table_pose.pose.position.z += -(2 * self.object_width) / 2 - table_height / 2
             table_pose.pose.position.x = 1.0
             table_pose.pose.position.y = 0
             table_height -= 0.008  # remove few milimeters to prevent contact between the object and the table
 
+        get_table_state_srv = rospy.ServiceProxy("/gazebo/get_model_state", GetModelState)
+        srv_m = GetModelStateRequest()
+        srv_m.model_name = "table"
+        srv_m.relative_entity_name = "base_footprint"
+        srv_res = get_table_state_srv.call(srv_m)
+
+        psd = PoseStamped()
+        psd.header = srv_res.header
+        psd.pose = srv_res.pose
         self.scene.add_box(
-            "table", table_pose, (table_depth, table_width, table_height)
+            "table", psd, (table_depth, table_width, table_height)
         )
 
         # # We need to wait for the object part to appear
@@ -275,11 +286,28 @@ class PickAndPlaceServer(object):
         rospy.logdebug("Using torso result: " + str(result))
         rospy.loginfo("Pick result: " + str(moveit_error_dict[result.error_code.val]))
 
+        self.scene.remove_world_object("table")
+
         return result.error_code.val
 
     def place_object(self, object_pose):
         rospy.loginfo("Clearing octomap")
         self.clear_octomap_srv.call(EmptyRequest())
+
+        # create table in planning scene
+        get_table_state_srv = rospy.ServiceProxy("/gazebo/get_model_state", GetModelState)
+        srv_m = GetModelStateRequest()
+        srv_m.model_name = "table_1m"
+        srv_m.relative_entity_name = "base_footprint"
+        srv_res = get_table_state_srv.call(srv_m)
+
+        psd = PoseStamped()
+        psd.header = srv_res.header
+        psd.pose = srv_res.pose
+        self.scene.add_box(
+            "table", psd, (1.0, 1.0, 1.0)
+        )
+
         possible_placings = self.sg.create_placings_from_object_pose(object_pose)
         # Try only with arm
         rospy.loginfo("Trying to place using only arm")
@@ -316,6 +344,7 @@ class PickAndPlaceServer(object):
         rospy.loginfo("Result: " + str(moveit_error_dict[result.error_code.val]))
         rospy.loginfo("Removing previous 'part' object")
         self.scene.remove_world_object("part")
+        self.scene.remove_world_object("table")
 
         return result.error_code.val
 
