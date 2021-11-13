@@ -34,7 +34,7 @@
             </attenuation>
             <direction>0.5 0.1 -0.9</direction>
         </light>
-        <!-- <actor name="actor">
+        <actor name="actor">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
                   0.01
@@ -152,24 +152,24 @@
                         <pose>-3 -9.5 0 0 0 0</pose>
                     </waypoint>
                     <waypoint>
-                        <time>7.5</time>
-                        <pose>3 -9.5 0 0 0 0</pose>
+                        <time>3</time>
+                        <pose>-1 -9.5 0 0 0 0</pose>
                     </waypoint>
                     <waypoint>
-                        <time>8.5</time>
-                        <pose>3 -9.5 0 0 0 -3.14</pose>
+                        <time>3.5</time>
+                        <pose>-1 -9.5 0 0 0 -3.14</pose>
                     </waypoint>
                     <waypoint>
-                        <time>16</time>
+                        <time>6.5</time>
                         <pose>-3 -9.5 0 0 0 -3.14</pose>
                     </waypoint>
                     <waypoint>
-                        <time>17</time>
+                        <time>7</time>
                         <pose>-3 -9.5 0 0 0 0</pose>
                     </waypoint>
                 </trajectory>
             </script>
-        </actor> -->
+        </actor>
         <actor name="actor1">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
