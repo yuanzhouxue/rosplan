@@ -8,15 +8,17 @@
     (:init
         ;todo: put the initial state's facts and numeric values here
         (robot_at wp0 v)
-
+        (docked v)
+        (dock_at wp0)
     )
 
     (:goal
         (and
             ;todo: put the goal condition here
-            (visited wp1)
-            (visited wp2)
-            (visited wp3)
+            (photo_taken wp1)
+            (photo_taken wp2)
+            (photo_taken wp3)
+            (docked v)
         )
     )
 

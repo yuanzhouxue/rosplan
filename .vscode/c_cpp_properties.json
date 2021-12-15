@@ -44,6 +44,7 @@
         "~/rosplan_ws/src/tiago_dependencies/ros_controllers/position_controllers/include/**",
         "~/rosplan_ws/src/tiago_dependencies/navigation_layers/range_sensor_layer/include/**",
         "~/rosplan_ws/src/tiago_dependencies/roboticsgroup_gazebo_plugins/include/**",
+        "~/rosplan_ws/src/ros_app/include/**",
         "~/rosplan_ws/src/ROSPlan/rosplan_knowledge_base/include/**",
         "~/rosplan_ws/src/ROSPlan/rosplan_planning_system/include/**",
         "~/rosplan_ws/src/tiago_dependencies/simple_models_robot/simple_models_gazebo/include/**",
@@ -58,7 +59,6 @@
         "~/rosplan_ws/src/turtlebot3_navigation_demo/include/**",
         "~/rosplan_ws/src/turtlebot3_dependencies/turtlebot3/turtlebot3_slam/include/**",
         "~/rosplan_ws/src/tiago_dependencies/ros_controllers/velocity_controllers/include/**",
-        "~/rosplan_ws/src/ros_app/include/**",
         "/usr/include/**"
       ],
       "name": "ROS"

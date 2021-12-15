@@ -141,9 +141,24 @@ include_directories(
 add_executable(goto_waypoint_action src/ActionInterface/GotoWaypointAction.cpp)
 target_link_libraries(goto_waypoint_action ${catkin_LIBRARIES})
 
+add_executable(dock_action src/ActionInterface/DockAction.cpp)
+target_link_libraries(dock_action ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(undock_action src/ActionInterface/UndockAction.cpp)
+target_link_libraries(undock_action ${catkin_LIBRARIES})
+
+add_executable(take_photo_action src/ActionInterface/TakePhotoAction.cpp)
+target_link_libraries(take_photo_action ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
 
 add_executable(visited_sensor src/SensorInterface/VisitedSensor.cpp)
 target_link_libraries(visited_sensor ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(docked_sensor src/SensorInterface/DockedSensor.cpp)
+target_link_libraries(docked_sensor ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(photo_taken_sensor src/SensorInterface/PhotoTakenSensor.cpp)
+target_link_libraries(photo_taken_sensor ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

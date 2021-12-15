@@ -4,7 +4,6 @@ using namespace std;
 
 namespace turtlebot3_navigation_demo {
     VisitedSensorInterface::VisitedSensorInterface() : _nh("~"), _it(_nh) {
-
         string image_topic = _nh.param<string>("image_topic", "/raspicam_node/image");
         image_transport::TransportHints hints("compressed");
         imgSub = _it.subscribe(image_topic, 1, &VisitedSensorInterface::imageCallback, this, hints);
@@ -58,7 +57,7 @@ namespace turtlebot3_navigation_demo {
             rotateRobot(0.0f);
             ros::Duration(0.5).sleep();
             if (arucoFound) {
-                sound_pub.publish(s);
+                // sound_pub.publish(s);
                 found = true;
                 break;
             }

@@ -13,3 +13,12 @@
 [submodule "src/turtlebot3_dependencies/turtlebot3_simulations"]
 	path = src/turtlebot3_dependencies/turtlebot3_simulations
 	url = https://gitee.com/yuanzhouxue/turtlebot3_simulations.git
+[submodule "src/turtlebot3_dependencies/turtlebot3_applications"]
+	path = src/turtlebot3_dependencies/turtlebot3_applications
+	url = https://github.com/ROBOTIS-GIT/turtlebot3_applications.git
+[submodule "src/turtlebot3_dependencies/ar_track_alvar"]
+	path = src/turtlebot3_dependencies/ar_track_alvar
+	url = https://github.com/ros-perception/ar_track_alvar.git
+[submodule "src/turtlebot3_dependencies/turtlebot3_applications_msgs"]
+	path = src/turtlebot3_dependencies/turtlebot3_applications_msgs
+	url = https://github.com/ROBOTIS-GIT/turtlebot3_applications_msgs.git
