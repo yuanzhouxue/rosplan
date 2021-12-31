@@ -163,8 +163,8 @@ add_executable(sensor_robot_at_node src/robot_at.cpp)
 target_link_libraries(sensor_robot_at_node ${catkin_LIBRARIES}  ${OpenCV_LIBRARIES})
 ############################################################################################ Auto generated code end ###############
 
-add_executable(segment_table src/segment_table.cpp)
-target_link_libraries(segment_table ${catkin_LIBRARIES})
+add_executable(segment_table1 src/segment_table.cpp)
+target_link_libraries(segment_table1 ${catkin_LIBRARIES})
 add_executable(look_around_node src/look_around.cpp)
 target_link_libraries(look_around_node ${catkin_LIBRARIES})
 

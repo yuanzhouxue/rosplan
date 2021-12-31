@@ -28,18 +28,18 @@
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
-    <node name="sensor_undocked" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
+    <!-- <node name="sensor_undocked" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="undocked" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
-    <node name="sensor_dock_at" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
+    </node> -->
+    <!-- <node name="sensor_dock_at" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="dock_at" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+    </node> -->
 
     <node name="sensor_visited" type="visited_sensor" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
@@ -47,12 +47,12 @@
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
     </node>
-    <node name="sensor_docked" type="docked_sensor" pkg="turtlebot3_navigation_demo" output="screen">
+    <!-- <node name="sensor_docked" type="docked_sensor" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="pred_name" value="docked" />
         <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
         <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
-    </node>
+    </node> -->
     <node name="sensor_photo_taken" type="photo_taken_sensor" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="image_path" value="$(find turtlebot3_navigation_demo)/output/" />
@@ -77,19 +77,19 @@
         <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
     </node>
-    <node name="action_dock" type="dock_action" pkg="turtlebot3_navigation_demo" output="screen">
+    <!-- <node name="action_dock" type="dock_action" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="image_path" value="$(find turtlebot3_navigation_demo)/output/" />
         <param name="pddl_action_name" value="dock" />
         <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
-    </node>
-    <node name="action_undock" type="undock_action" pkg="turtlebot3_navigation_demo" output="screen">
+    </node> -->
+    <!-- <node name="action_undock" type="undock_action" pkg="turtlebot3_navigation_demo" output="screen">
         <param name="knowledge_base" value="rosplan_knowledge_base" />
         <param name="image_path" value="$(find turtlebot3_navigation_demo)/output/" />
         <param name="pddl_action_name" value="undock" />
         <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
         <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
-    </node>
+    </node> -->
 
 </launch>

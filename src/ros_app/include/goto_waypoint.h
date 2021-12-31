@@ -8,6 +8,7 @@
 #include <std_srvs/Empty.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <rosplan_action_interface/RPActionInterface.h>
+#include <trajectory_msgs/JointTrajectory.h>
 
 namespace ros_app {
 
@@ -19,6 +20,7 @@ namespace ros_app {
         ros::ServiceClient clear_costmaps_client_;
         std::string waypoint_frameid_;
         std::string wp_namespace_;
+        ros::Publisher head_cmd;
 
     public:
         goto_waypoint_ActionInterface(std::string& actionserver);

@@ -181,6 +181,14 @@ namespace ros_app {
         play_m_as.sendGoalAndWait(pmg);
         ROS_INFO("(%s): Raise object done.", node_name.c_str());
 
+
+        ros::ServiceClient rm_table = _nh.serviceClient<std_srvs::Empty>("/remove_box");
+        std_srvs::Empty e;
+        rm_table.call(e);
+        // ros::Publisher ppp = _nh.advertise<std_msgs::Empty>("pick_and_place_server/remove_table", 1);
+        // std_msgs::Empty empty_msg;
+        // ppp.publish(empty_msg);
+        // ppp.shutdown();
         return true;
     }
 }

@@ -3,7 +3,7 @@
 (define (domain turtlebotNavDomain)
 
     ;remove requirements that are not needed
-    (:requirements :durative-actions :typing)
+    (:requirements :durative-actions :typing :numeric-fluents)
 
     (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
         robot waypoint
@@ -15,30 +15,33 @@
     (:predicates ;todo: define predicates here
         (robot_at ?wp - waypoint ?v - robot)
         (visited ?wp - waypoint)
-        ; need to be checked
-        (docked ?v - robot)
         ; check whether the photo exists
         (photo_taken ?wp - waypoint)
 
-        (undocked ?v - robot)
-        (dock_at ?wp - waypoint)
+        ; ; need to be checked
+        ; (docked ?v - robot)
+        ; (undocked ?v - robot)
+        ; (dock_at ?wp - waypoint)
     )
 
     (:functions ;todo: define numeric functions here
+        ; (time)
+        (distance ?wp1 ?wp2 - waypoint)
     )
 
     ;define actions here
     (:durative-action goto_waypoint
         :parameters (?from ?to - waypoint ?v - robot)
-        :duration (= ?duration 20)
+        :duration (= ?duration (distance ?from ?to))
         :condition (and
-            (over all (undocked ?v))
+            ; (over all (undocked ?v))
             (at start (robot_at ?from ?v))
         )
         :effect (and
             (at start (not (robot_at ?from ?v)))
             (at end (robot_at ?to ?v))
             (at end (visited ?to))
+            ; (at start (increase (time) 20))
         )
     )
 
@@ -47,55 +50,56 @@
         :duration (= ?duration 1)
         :condition (and
             (over all (and 
-                (undocked ?v)
+                ; (undocked ?v)
                 (robot_at ?wp ?v)
             ))
         )
         :effect (and 
             (at end (and 
                 (photo_taken ?wp)
+                ; (increase (time) 1)
             ))
         )
     )
     
 
-    (:durative-action dock
-        :parameters (?v - robot ?wp - waypoint)
-        :duration (= ?duration 10)
-        :condition (and
-            (over all (and
-                (dock_at ?wp)
-            ))
-            (at start (and 
-                (robot_at ?wp ?v)
-            ))
-        )
-        :effect (and
-            (at end (and
-                (docked ?v)
-                (not (undocked ?v))
-            ))
-        )
-    )
+    ; (:durative-action dock
+    ;     :parameters (?v - robot ?wp - waypoint)
+    ;     :duration (= ?duration 10)
+    ;     :condition (and
+    ;         (over all (and
+    ;             (dock_at ?wp)
+    ;         ))
+    ;         (at start (and 
+    ;             (robot_at ?wp ?v)
+    ;         ))
+    ;     )
+    ;     :effect (and
+    ;         (at end (and
+    ;             (docked ?v)
+    ;             (not (undocked ?v))
+    ;         ))
+    ;     )
+    ; )
 
-    (:durative-action undock
-        :parameters (?v - robot ?wp - waypoint)
-        :duration (= ?duration 5)
-        :condition (and
-            (over all (and
-                (docked ?v)
-                (dock_at ?wp)
-                (robot_at ?wp ?v)
-            ))
+    ; (:durative-action undock
+    ;     :parameters (?v - robot ?wp - waypoint)
+    ;     :duration (= ?duration 5)
+    ;     :condition (and
+    ;         (over all (and
+    ;             (docked ?v)
+    ;             (dock_at ?wp)
+    ;             (robot_at ?wp ?v)
+    ;         ))
             
-        )
-        :effect (and
-            (at end (and
-                (undocked ?v)
-                (not (docked ?v))
-            ))
-        )
-    )
+    ;     )
+    ;     :effect (and
+    ;         (at end (and
+    ;             (undocked ?v)
+    ;             (not (docked ?v))
+    ;         ))
+    ;     )
+    ; )
     
 
 )

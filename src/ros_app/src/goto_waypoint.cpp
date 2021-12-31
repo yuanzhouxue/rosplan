@@ -7,6 +7,7 @@ namespace ros_app {
         // get waypoints reference frame from param server
         _nh.param<std::string>("waypoint_frameid", waypoint_frameid_, "map");
         _nh.param<std::string>("wp_namespace", wp_namespace_, "/rosplan_demo_waypoints/wp");
+        head_cmd = _nh.advertise<trajectory_msgs::JointTrajectory>("/head_controller/command", 1);
 
         // setup a move base clear costmap client (to be able to send clear costmap requests later on)
         clear_costmaps_client_ = _nh.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");
@@ -42,6 +43,13 @@ namespace ros_app {
 
     // action dispatch callback
     bool goto_waypoint_ActionInterface::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
+        trajectory_msgs::JointTrajectory jt;
+        jt.joint_names = { "head_1_joint", "head_2_joint" };
+        trajectory_msgs::JointTrajectoryPoint jtp;
+        jtp.positions = { 0.0, -0.75 };
+        jtp.time_from_start = ros::Duration(2.0);
+        jt.points.push_back(jtp);
+        head_cmd.publish(jt);
 
         // get waypoint ID from action dispatch msg
         std::string wpID;

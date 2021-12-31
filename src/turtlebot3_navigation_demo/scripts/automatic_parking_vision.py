@@ -34,6 +34,7 @@ MARKER_ID_DETECTION = 17
 
 class AutomaticParkingVision():
     def __init__(self):
+        rospy.loginfo("Starting")
         self.sub_odom_robot = rospy.Subscriber('/odom', Odometry, self.cbGetRobotOdom, queue_size = 1)
         self.sub_info_marker = rospy.Subscriber('/ar_pose_marker', AlvarMarkers, self.cbGetMarkerOdom, queue_size = 1)
 
@@ -68,6 +69,7 @@ class AutomaticParkingVision():
             loop_rate.sleep()
 
         rospy.on_shutdown(self.fnShutDown)
+        rospy.spin()
 
     def cbGetRobotOdom(self, robot_odom_msg):
         if self.is_odom_received == False:
@@ -108,25 +110,25 @@ class AutomaticParkingVision():
             self.is_sequence_finished = self.fnSeqSearchingGoal()
             
             if self.is_sequence_finished == True:
-                print("Finished 1")
+                rospy.loginfo("Finished 1")
                 self.current_parking_sequence = self.ParkingSequence.changing_direction.value
                 self.is_sequence_finished = False
 
         elif self.current_parking_sequence == self.ParkingSequence.changing_direction.value:
-            print("changing_direction")
+            rospy.loginfo("changing_direction")
             self.is_sequence_finished = self.fnSeqChangingDirection()
             
             if self.is_sequence_finished == True:
-                print("Finished 2")
+                rospy.loginfo("Finished 2")
                 self.current_parking_sequence = self.ParkingSequence.moving_nearby_parking_lot.value
                 self.is_sequence_finished = False
 
         elif self.current_parking_sequence == self.ParkingSequence.moving_nearby_parking_lot.value:
-            print("moving_nearby_parking_lot")
+            rospy.loginfo("moving_nearby_parking_lot")
             self.is_sequence_finished = self.fnSeqMovingNearbyParkingLot()
             
             if self.is_sequence_finished == True:
-                print("Finished 3")
+                rospy.loginfo("Finished 3")
                 self.current_parking_sequence = self.ParkingSequence.parking.value
                 self.is_sequence_finished = False
 
@@ -134,13 +136,13 @@ class AutomaticParkingVision():
             self.is_sequence_finished = self.fnSeqParking()
             
             if self.is_sequence_finished == True:
-                print("Finished 4")
+                rospy.loginfo("Finished 4")
                 self.current_parking_sequence = self.ParkingSequence.stop.value
                 self.is_sequence_finished = False
 
         elif self.current_parking_sequence == self.ParkingSequence.stop.value:
             self.fnStop()
-            print("Finished 5")
+            rospy.loginfo("Finished 5")
             self.current_parking_sequence = self.ParkingSequence.finished.value
             rospy.on_shutdown(self.fnShutDown)
 
@@ -168,6 +170,7 @@ class AutomaticParkingVision():
 
     def fnSeqMovingNearbyParkingLot(self):
         if self.current_nearby_sequence == self.NearbySequence.initial_turn.value:
+            rospy.loginfo("initial_turn")
             if self.is_triggered == False:
                 self.is_triggered = True
                 self.initial_robot_pose_theta = self.robot_2d_theta
@@ -194,6 +197,7 @@ class AutomaticParkingVision():
                 self.is_triggered = False
 
         elif self.current_nearby_sequence == self.NearbySequence.go_straight.value:
+            rospy.loginfo("go_stright")
             dist_from_start = self.fnCalcDistPoints(self.initial_robot_pose_x, self.robot_2d_pose_x, self.initial_robot_pose_y, self.robot_2d_pose_y)
 
             desired_dist = self.initial_marker_pose_x * abs(math.cos((math.pi / 2.) - self.initial_marker_pose_theta))
@@ -206,6 +210,7 @@ class AutomaticParkingVision():
                 self.current_nearby_sequence = self.NearbySequence.turn_right.value
 
         elif self.current_nearby_sequence == self.NearbySequence.turn_right.value:
+            rospy.loginfo("turn_right")
             if self.is_triggered == False:
                 self.is_triggered = True
                 self.initial_robot_pose_theta = self.robot_2d_theta
@@ -232,7 +237,7 @@ class AutomaticParkingVision():
         desired_angle_turn = math.atan2(self.marker_2d_pose_y - 0, self.marker_2d_pose_x - 0)
         self.fnTrackMarker(-desired_angle_turn)
         
-        print(self.marker_2d_pose_x)
+        rospy.loginfo(self.marker_2d_pose_x)
         if abs(self.marker_2d_pose_x) < 0.22:
             self.fnStop()
             return True
@@ -322,7 +327,6 @@ class AutomaticParkingVision():
         return math.sqrt((x1 - x2) ** 2. + (y1 - y2) ** 2.)
 
     def fnShutDown(self):
-        rospy.loginfo("Shutting down. cmd_vel will be 0")
 
         twist = Twist()
         twist.linear.x = 0
@@ -331,12 +335,15 @@ class AutomaticParkingVision():
         twist.angular.x = 0
         twist.angular.y = 0
         twist.angular.z = 0
-        self.pub_cmd_vel.publish(twist) 
+        self.pub_cmd_vel.publish(twist)
+        rospy.loginfo("Shutting down. cmd_vel will be 0")
+        rospy.sleep(0.2)
 
     def main(self):
         rospy.spin()
 
 if __name__ == '__main__':
     rospy.init_node('automatic_parking_vision')
+    rospy.loginfo("Starting main")
     node = AutomaticParkingVision()
-    node.main()
+    # node.main()
