@@ -51,6 +51,9 @@ namespace turtlebot3_navigation_demo {
         // 每次转动45度
         float eachTurnInPi = 0.25f;
         int turnRounds = 2.15 / eachTurnInPi;
+        if (arucoFound) {
+            return true;
+        }
         for (int _ = 0; _ < turnRounds; ++_) {
             rotateRobot(-0.5f);
             ros::Duration(2 * 3.141592653589 * eachTurnInPi).sleep();

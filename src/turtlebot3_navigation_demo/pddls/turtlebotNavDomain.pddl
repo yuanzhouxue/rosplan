@@ -17,6 +17,7 @@
         (visited ?wp - waypoint)
         ; check whether the photo exists
         (photo_taken ?wp - waypoint)
+        (connected ?wp1 ?wp2 - waypoint)
 
         ; ; need to be checked
         ; (docked ?v - robot)
@@ -36,6 +37,7 @@
         :condition (and
             ; (over all (undocked ?v))
             (at start (robot_at ?from ?v))
+            (over all (connected ?from ?to))
         )
         :effect (and
             (at start (not (robot_at ?from ?v)))
@@ -49,7 +51,7 @@
         :parameters (?v - robot ?wp - waypoint)
         :duration (= ?duration 1)
         :condition (and
-            (over all (and 
+            (at start (and 
                 ; (undocked ?v)
                 (robot_at ?wp ?v)
             ))

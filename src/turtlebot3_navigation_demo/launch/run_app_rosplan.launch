@@ -1,0 +1,62 @@
+<launch>
+    <arg name="sensor_dispatch_topic" default="/rosplane_sensor_interface/sensor_dispatch"/>
+    <arg name="sensor_feedback_topic" default="/rosplane_sensor_interface/sensor_feedback"/>
+
+    <arg name="action_dispatch_topic" default="/rosplan_plan_dispatcher/action_dispatch"/>
+    <arg name="action_feedback_topic" default="/rosplan_plan_dispatcher/action_feedback"/>
+
+    <!-- rosbridge -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+    <!-- ROSPlan -->
+    <include file="$(find rosplan_planning_system)/launch/interfaced_planning_system.launch">
+        <arg name="data_path" value="$(find turtlebot3_navigation_demo)/output" />
+	   	<arg name="domain_path" value="$(find turtlebot3_navigation_demo)/pddls/turtlebotNavDomain.pddl" />
+        <!-- load a particular initial state into KB at startup (optional) -->
+	   	<arg name="problem_path" value="$(find turtlebot3_navigation_demo)/pddls/turtlebotNavProblem.pddl" />
+        <!-- automatically generated pddl problem will be created here -->
+        <arg name="autom_gen_problem_path" value="$(find turtlebot3_navigation_demo)/output/autogen.pddl" />
+        <!-- planner will produce output plan and write to this location -->
+    </include>
+
+    <node name="sensor_robot_at" type="dummysensor_node" pkg="rosplan_planning_system" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="robot_at" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+    <node name="sensor_visited" type="visited_sensor" pkg="turtlebot3_navigation_demo" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="pred_name" value="visited" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+    <node name="sensor_photo_taken" type="photo_taken_sensor" pkg="turtlebot3_navigation_demo" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="image_path" value="$(find turtlebot3_navigation_demo)/output/" />
+        <param name="pred_name" value="photo_taken" />
+        <param name="sensor_dispatch_topic" value="$(arg sensor_dispatch_topic)" />
+        <param name="sensor_feedback_topic" value="$(arg sensor_feedback_topic)" />
+    </node>
+    <node name="action_goto_waypoint" type="goto_waypoint_action" pkg="turtlebot3_navigation_demo" output="screen">
+        <rosparam file="$(find turtlebot3_navigation_demo)/config/waypoints.yaml" command="load" />
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="wp_namespace" value="/action_goto_waypoint/turtlebot3_navigation_demo_waypoints" />
+        <param name="pddl_action_name" value="goto_waypoint" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+    <node name="action_take_photo" type="take_photo_action" pkg="turtlebot3_navigation_demo" output="screen">
+        <param name="knowledge_base" value="rosplan_knowledge_base" />
+        <param name="image_path" value="$(find turtlebot3_navigation_demo)/output/" />
+        <param name="pddl_action_name" value="take_photo" />
+        <param name="action_dispatch_topic" value="$(arg action_dispatch_topic)" />
+        <param name="action_feedback_topic" value="$(arg action_feedback_topic)" />
+    </node>
+
+
+
+    <include file="$(find turtlebot3_navigation_demo)/launch/turtlebot3_navigation.launch" />
+    <include file="$(find turtlebot3_navigation_demo)/launch/laser_filter.launch" />
+
+</launch>

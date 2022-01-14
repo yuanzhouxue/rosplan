@@ -3,9 +3,11 @@
 
 import rospy
 from std_srvs.srv import Empty
+from rosplan_dispatch_msgs.srv import DispatchService
 import time
 
 if __name__ == "__main__":
+    rospy.init_node("run_rosplan")
     rospy.wait_for_service("/rosplan_problem_interface/problem_generation_server")
     rospy.wait_for_service("/rosplan_planner_interface/planning_server")
     rospy.wait_for_service("/rosplan_parsing_interface/parse_plan")
@@ -14,7 +16,7 @@ if __name__ == "__main__":
     problem_gen_client = rospy.ServiceProxy("/rosplan_problem_interface/problem_generation_server", Empty)
     planning_client = rospy.ServiceProxy("/rosplan_planner_interface/planning_server", Empty)
     parsing_client = rospy.ServiceProxy("/rosplan_parsing_interface/parse_plan", Empty)
-    dispatch_client = rospy.ServiceProxy("/rosplan_plan_dispatcher/dispatch_plan", Empty)
+    dispatch_client = rospy.ServiceProxy("/rosplan_plan_dispatcher/dispatch_plan", DispatchService)
 
 
     start_time = time.time()
@@ -26,5 +28,6 @@ if __name__ == "__main__":
     dispatch_client.call()
     task_end_time = time.time()
 
-    rospy.loginfo(f"Total planning time: {planning_end_time - start_time}s.")
-    rospy.loginfo(f"Total running time: {task_end_time - start_time}s.")
+    rospy.loginfo("Total planning time: " + str(planning_end_time - start_time) + " s.")
+    rospy.loginfo("Total running time: " + str(task_end_time - start_time) + " s.")
+    # rospy.spin()
