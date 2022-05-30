@@ -54,7 +54,7 @@ from moveit_msgs.srv import (
     GetPlanningSceneResponse,
 )
 from std_srvs.srv import Empty, EmptyRequest
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, String
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest, GetModelStateResponse
 
 from copy import deepcopy
@@ -154,6 +154,8 @@ class PickAndPlaceServer(object):
             rospy.loginfo(
                 "Found links to allow contacts: " + str(self.links_to_allow_contact)
             )
+        self.remove_table_sub = rospy.Subscriber("/remove_box", String, callback=self.remove_box_cb, queue_size=10)
+        self.s = rospy.Service("/remove_box", Empty, self.remove_box_srv_cb)
 
         self.pick_as = SimpleActionServer(
             "/pickup_pose", PickUpPoseAction, execute_cb=self.pick_cb, auto_start=False
@@ -188,6 +190,13 @@ class PickAndPlaceServer(object):
             self.place_as.set_aborted(p_res)
         else:
             self.place_as.set_succeeded(p_res)
+    def remove_box_cb(self, msg):
+        rospy.loginfo("removing object " + msg.data)
+        self.scene.remove_world_object(msg.data)
+
+    def remove_box_srv_cb(self, req):
+        rospy.loginfo("removing object table")
+        self.scene.remove_world_object("table")
 
     def wait_for_planning_scene_object(self, object_name="part"):
         rospy.loginfo(
@@ -259,8 +268,9 @@ class PickAndPlaceServer(object):
         psd = PoseStamped()
         psd.header = srv_res.header
         psd.pose = srv_res.pose
+        psd.pose.position.z += 0.5
         self.scene.add_box(
-            "table", psd, (table_depth, table_width, table_height)
+            "table", psd, (table_depth, table_width, 1.0)
         )
 
         # # We need to wait for the object part to appear
@@ -286,7 +296,7 @@ class PickAndPlaceServer(object):
         rospy.logdebug("Using torso result: " + str(result))
         rospy.loginfo("Pick result: " + str(moveit_error_dict[result.error_code.val]))
 
-        self.scene.remove_world_object("table")
+        self.scene.remove_world_object("part")
 
         return result.error_code.val
 

@@ -12,7 +12,7 @@ using rosplan_knowledge_msgs::KnowledgeUpdateServiceArray;
 namespace rosplane {
 
     /* constructor */
-    PlaceAction::PlaceAction() : nh_("~"), play_m_as("/play_motion"), place_as("/place_pose"), tf_l(tfBuffer) {
+    PlaceAction::PlaceAction() : nh_("~"), play_m_as("/play_motion"), place_as("/place_pose"), tf_l(tfBuffer), group_arm_torso("arm_torso") {
         node_name = ros::this_node::getName();
         clear_costmaps_client_ = nh_.serviceClient<std_srvs::Empty>("/move_base/clear_costmaps");
         update_knowledge_client_ = nh_.serviceClient<KnowledgeUpdateService>("/rosplan_knowledge_base/update");
@@ -97,6 +97,28 @@ namespace rosplane {
         ROS_INFO("(%s): Lift torso done.", node_name.c_str());
     }
 
+    void PlaceAction::addBox(const string& id, const geometry_msgs::Pose& pose, double depth, double width, double height) {
+        moveit_msgs::CollisionObject collision_object;
+        collision_object.header.frame_id = group_arm_torso.getPlanningFrame();
+        collision_object.id = id;
+        shape_msgs::SolidPrimitive primitive;
+        primitive.type = primitive.BOX;
+        primitive.dimensions = { depth, width, height };
+
+        collision_object.primitives.push_back(primitive);
+        collision_object.primitive_poses.push_back(pose);
+        collision_object.operation = collision_object.ADD;
+
+        std::vector<moveit_msgs::CollisionObject> collision_objects = { collision_object };
+        ROS_INFO_NAMED("PlaceAction", "Adding object to the world");
+        planning_scene_interface.addCollisionObjects(collision_objects);
+    }
+
+    void PlaceAction::removeBox(const string& id) {
+        ROS_INFO_NAMED("PlaceAction", "Removing object to the world");
+        planning_scene_interface.removeCollisionObjects({ id });
+    }
+
     bool PlaceAction::moveGripperTo(const geometry_msgs::PoseStamped& targetPose) {
         //select group of joints
         moveit::planning_interface::MoveGroupInterface group_arm_torso("arm_torso");
@@ -134,13 +156,31 @@ namespace rosplane {
     bool PlaceAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
         liftTorso();
 
+        trajectory_msgs::JointTrajectory jt;
+        jt.joint_names = { "gripper_left_finger_joint", "gripper_right_finger_joint" };
+        trajectory_msgs::JointTrajectoryPoint jtp;
+        jtp.positions = { 0.015, 0.015 };
+        jtp.time_from_start = ros::Duration(1.0);
+        jt.points.push_back(jtp);
+        gripper_cmd.publish(jt);
+        ros::Duration(1.0).sleep();
+
+        ros::ServiceClient get_model_state = nh_.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
+        gazebo_msgs::GetModelState srv;
+        srv.request.model_name = "table_1m";
+        srv.request.relative_entity_name = "base_footprint";
+        get_model_state.call(srv);
+        geometry_msgs::Pose table_pose = srv.response.pose;
+        table_pose.position.z += 0.5;
+        addBox("table", table_pose, 1.1, 1.1, 1.2);
+
         // 放物体的位置
         geometry_msgs::PoseStamped goal_pose;
         goal_pose.header.frame_id = "base_footprint";
         goal_pose.pose.position.x = 0.5f;
         goal_pose.pose.position.y = 0.0f;
         goal_pose.pose.position.z = 1.0f;
-        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(-1.57f, 0.f, 0.f);
 
 
         ROS_INFO("(%s): Gonna place the object on the table.", ros::this_node::getName().c_str());
@@ -154,9 +194,9 @@ namespace rosplane {
         ROS_INFO("(%s): Done.", ros::this_node::getName().c_str());
 
         // 松开gripper
-        trajectory_msgs::JointTrajectory jt;
+        // trajectory_msgs::JointTrajectory jt;
         jt.joint_names = { "gripper_left_finger_joint", "gripper_right_finger_joint" };
-        trajectory_msgs::JointTrajectoryPoint jtp;
+        // trajectory_msgs::JointTrajectoryPoint jtp;
         jtp.positions = { 0.044, 0.044 };
         jtp.time_from_start = ros::Duration(1.0);
         jt.points.push_back(jtp);
@@ -168,7 +208,7 @@ namespace rosplane {
         goal_pose.pose.position.x = 0.5f;
         goal_pose.pose.position.y = 0.0f;
         goal_pose.pose.position.z = 1.1f;
-        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.57f, 0.f, 0.f);
+        goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(-1.57f, 0.f, 0.f);
         moveGripperTo(goal_pose);
         ROS_INFO("Move arm away");
         goal_pose.pose.position.x = 0.15f;
@@ -176,6 +216,9 @@ namespace rosplane {
         goal_pose.pose.position.z = 1.0f;
         goal_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(0.0, 1.57f, 0.f);
         moveGripperTo(goal_pose);
+
+
+        removeBox("table");
 
         trajectory_msgs::JointTrajectory arm_traj;
         arm_traj.joint_names = { "arm_1_joint", "arm_2_joint", "arm_3_joint", "arm_4_joint", "arm_5_joint", "arm_6_joint", "arm_7_joint" };

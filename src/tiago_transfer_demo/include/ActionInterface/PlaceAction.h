@@ -5,6 +5,7 @@
 #include <ros/ros.h>
 #include <vector>
 #include <geometry_msgs/PoseStamped.h>
+#include <gazebo_msgs/GetModelState.h>
 #include <std_srvs/Empty.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <actionlib/client/simple_action_client.h>
@@ -32,6 +33,8 @@
 #include <moveit_msgs/MoveItErrorCodes.h>
 #include <control_msgs/QueryTrajectoryState.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
+#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
 
 
 using std::string;
@@ -59,6 +62,10 @@ namespace rosplane {
         ros::ServiceServer service;
 
 
+        moveit::planning_interface::MoveGroupInterface group_arm_torso;
+        moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+
         tf2_ros::Buffer tfBuffer;
         tf2_ros::TransformListener tf_l;
         // tf::TransformListener tf_1;
@@ -79,6 +86,8 @@ namespace rosplane {
         void liftTorso();
         bool moveGripperTo(const geometry_msgs::PoseStamped& targetPose);
         bool callback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
+        void addBox(const string& id, const geometry_msgs::Pose& pose, double depth, double width, double height);
+        void removeBox(const string& id);
 
     public:
 

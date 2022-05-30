@@ -103,11 +103,7 @@ namespace rosplane {
 
     /* action dispatch callback */
     bool PickUpAction::concreteCallback(const rosplan_dispatch_msgs::ActionDispatch::ConstPtr& msg) {
-        // if (!robot_prepared) {
         prepareRobot();
-        // robot_prepared = true;
-    // }
-
         ROS_INFO("(%s): spherical_grasp_gui: Waiting for an aruco detection", node_name.c_str());
         auto aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
         auto robotPoses = ros::topic::waitForMessage<geometry_msgs::PoseArray>("/particlecloud");
@@ -118,61 +114,33 @@ namespace rosplane {
         actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> action_client_("/move_base", true);
         action_client_.waitForServer();
 
-        // dispatch MoveBase action
+        ros::ServiceClient get_aruco_state = nh_.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
+        gazebo_msgs::GetModelState get_model_state_srv;
+        get_model_state_srv.request.model_name = "aruco_cube_0";
+        get_model_state_srv.request.relative_entity_name = "map";
+        get_aruco_state.call(get_model_state_srv);
+
+        // goto aruco side
         move_base_msgs::MoveBaseGoal goal;
         goal.target_pose.header.frame_id = "map";
-        goal.target_pose.pose.position = robotPose.position;
-        goal.target_pose.pose.orientation.x = q_rotated.x();
-        goal.target_pose.pose.orientation.y = q_rotated.y();
-        goal.target_pose.pose.orientation.z = q_rotated.z();
-        goal.target_pose.pose.orientation.w = q_rotated.w();
-
-
+        goal.target_pose.pose.position.x = get_model_state_srv.response.pose.position.x;
+        goal.target_pose.pose.position.y = get_model_state_srv.response.pose.position.y - 0.5;
+        goal.target_pose.pose.position.z = 0.0;
+        goal.target_pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(0.0f, 0.f, 1.57f);
         action_client_.sendGoal(goal);
         action_client_.waitForResult();
         ROS_INFO("Turning robot done.");
 
-        // aruco_pose = ros::topic::waitForMessage<geometry_msgs::PoseStamped>("/aruco_single/pose");
-
-
-        // auto newFrameId = stripLeadingSlash(aruco_pose->header.frame_id);
-        // geometry_msgs::PoseStamped ps;
-        // ps.pose.position = aruco_pose->pose.position;
-        // // TODO: I dont know what is tfBuffer.get_latest_common_time(...), so I used ros::Time::now() instead
-        // ps.header.stamp = ros::Time::now();
-        // ps.header.frame_id = newFrameId;
-        // bool transformOK = false;
-        // geometry_msgs::PoseStamped aruco_ps;
-        // while (!transformOK && !ros::isShuttingDown()) {
-        //     try {
-        //         auto time = ros::Time::now();
-        //         while (!tfBuffer.canTransform(newFrameId, string("base_footprint"), time)) ros::Duration(0.01).sleep();
-        //         auto transform = tfBuffer.lookupTransform(string("base_footprint"), newFrameId, time);
-        //         tf2::doTransform(ps, aruco_ps, transform);
-        //         transformOK = true;
-        //     }
-        //     catch (exception e) {
-        //         ROS_WARN("(%s): Exception on transforming point... trying again \n(%s)", node_name.c_str(), e.what());
-        //         ros::Duration(0.01).sleep();
-        //         ps.header.stamp = ros::Time::now();
-        //     }
-        // }
-
-        ros::ServiceClient get_aruco_state = nh_.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
-        gazebo_msgs::GetModelState get_model_state_srv;
-        get_model_state_srv.request.model_name = "aruco_cube_0";
         get_model_state_srv.request.relative_entity_name = "base_footprint";
         get_aruco_state.call(get_model_state_srv);
         geometry_msgs::PoseStamped exact_aruco_pose;
         exact_aruco_pose.pose = get_model_state_srv.response.pose;
-        
         ROS_INFO("Aruco cube found");
 
 
         tiago_pick_demo::PickUpPoseGoal pick_g;
         ROS_INFO("(%s): Setting cube pose based on ArUco detection", node_name.c_str());
         pick_g.object_pose.pose.position = exact_aruco_pose.pose.position;
-        // pick_g.object_pose.pose.position.z -= 0.1 * (1.0 / 2.0);
 
         ROS_INFO("(%s): aruco pose in base_footprint: %f, %f, %f", node_name.c_str(), pick_g.object_pose.pose.position.x, pick_g.object_pose.pose.position.y, pick_g.object_pose.pose.position.z);
         pick_g.object_pose.header.frame_id = "base_footprint";
@@ -192,32 +160,27 @@ namespace rosplane {
             pmg.skip_planning = false;
             play_m_as.sendGoalAndWait(pmg);
             ROS_INFO("(%s): Raise object done.", node_name.c_str());
+            ros::ServiceClient rm_table = nh_.serviceClient<std_srvs::Empty>("/remove_box");
+            std_srvs::Empty e;
+            rm_table.call(e);
             return false;
         }
 
-        // FIXME: 读取关节值来判断是否抓取成功是不可行的（因为始终会读取到程序设定的值而不是实际的值）
-        // ros::ServiceClient gripper_controller_client = nh_.serviceClient<control_msgs::QueryTrajectoryState>("/gripper_controller/query_state");
-        // control_msgs::QueryTrajectoryState para;
-        // para.request.time = ros::Time::now();
-        // gripper_controller_client.call(para);
-        // for (int i = 0; i < para.response.name.size(); ++i) {
-        //     ROS_INFO("(%s): %s: %f", node_name.c_str(), para.response.name[i].c_str(), para.response.position[i]);
-        // }
-        // double obj_width = nh_.param<double>("/pick_and_place_server/object_width", -1);
-        // double obj_depth = nh_.param<double>("/pick_and_place_server/object_depth", -1);
-        // if (para.response.position[0] + para.response.position[1] < min(obj_depth, obj_width)) {
-        //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
-        //     return false;
-        // }
         auto res = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>("/gripper_controller/state");
         ROS_INFO("(%s): actual[0]: %.4f, desired[0]: %.4f, actual[1]: %.4f, desired[1]: %.4f", node_name.c_str(), res->actual.positions[0], res->desired.positions[0], res->actual.positions[1], res->desired.positions[1]);
-        if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
-            ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
-            // ros::ServiceClient _plan_dispatch_cancel_client = nh_.serviceClient<std_srvs::Empty>("/rosplan_plan_dispatcher/cancel_dispatch");
-            // std_srvs::Empty empty;
-            // _plan_dispatch_cancel_client.call(empty);
-            return false;
-        }
+        // if (res->actual.positions[0] - res->desired.positions[0] + res->actual.positions[1] - res->desired.positions[1] < 0.01) {
+        //     ROS_ERROR("(%s): Failed to grasp, pick up action failed.", node_name.c_str());
+        //     ROS_INFO("(%s): Raise object done.", node_name.c_str());
+        //     // ros::Publisher ppp = nh_.advertise<std_msgs::String>("/remove_box", 1);
+        //     // std_msgs::String empty_msg;
+        //     // empty_msg.data = "table";
+        //     // ppp.publish(empty_msg);
+        //     // ros::Duration(1.0).sleep();
+        //     ros::ServiceClient rm_table = nh_.serviceClient<std_srvs::Empty>("/remove_box");
+        //     std_srvs::Empty e;
+        //     rm_table.call(e);
+        //     return false;
+        // }
 
         liftTorso();
         ROS_INFO("(%s): Moving arm to a safe pose", node_name.c_str());
@@ -227,6 +190,9 @@ namespace rosplane {
         play_m_as.sendGoalAndWait(pmg);
         ROS_INFO("(%s): Raise object done.", node_name.c_str());
 
+        ros::ServiceClient rm_table = nh_.serviceClient<std_srvs::Empty>("/remove_box");
+        std_srvs::Empty e;
+        rm_table.call(e);
         return true;
     }
 

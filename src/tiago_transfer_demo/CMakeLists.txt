@@ -148,6 +148,10 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 
+add_executable(dummyaction_node src/ActionInterface/DummyActionInterface.cpp)
+target_link_libraries(dummyaction_node ${catkin_LIBRARIES})
+add_executable(dummysensor_node src/SensorInterface/DummySensorInterface.cpp)
+target_link_libraries(dummysensor_node ${catkin_LIBRARIES})
 
 add_executable(simulated_movebase_node src/ActionInterface/SimulatedMovebase.cpp)
 target_link_libraries(simulated_movebase_node ${catkin_LIBRARIES})
