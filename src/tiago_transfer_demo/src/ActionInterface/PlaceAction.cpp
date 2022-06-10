@@ -199,6 +199,7 @@ namespace rosplane {
         // trajectory_msgs::JointTrajectoryPoint jtp;
         jtp.positions = { 0.044, 0.044 };
         jtp.time_from_start = ros::Duration(1.0);
+        jt.points.clear();
         jt.points.push_back(jtp);
         gripper_cmd.publish(jt);
         ros::Duration(1.0).sleep();

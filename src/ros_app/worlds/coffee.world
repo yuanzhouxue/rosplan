@@ -34,7 +34,7 @@
             </attenuation>
             <direction>0.5 0.1 -0.9</direction>
         </light>
-        <actor name="actor">
+        <!-- <actor name="actor">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
                   0.01
@@ -313,7 +313,7 @@
                     </waypoint>
                 </trajectory>
             </script>
-        </actor>
+        </actor> -->
         <model name='ground_plane'>
             <static>1</static>
             <link name='link'>
@@ -788,7 +788,7 @@
                     <wrench>0 0 0 0 -0 0</wrench>
                 </link>
             </model>
-            <model name='citizen_extras_female_02'>
+            <!-- <model name='citizen_extras_female_02'>
                 <pose frame=''>3.45447 0.395528 0.000427 0.001606 -0.025054 -0.000178</pose>
                 <scale>1 1 1</scale>
                 <link name='link'>
@@ -807,7 +807,7 @@
                     <acceleration>0 0 -9.81 0 -0 0</acceleration>
                     <wrench>0 0 -196.2 0 -0 0</wrench>
                 </link>
-            </model>
+            </model> -->
             <model name='ground_plane'>
                 <pose frame=''>0 0 0 0 -0 0</pose>
                 <scale>1 1 1</scale>
@@ -1749,7 +1749,7 @@
             </link>
             <pose frame=''>-2.67867 1.28669 -0.25 0 -0 0</pose>
         </model>
-        <model name='citizen_extras_female_02'>
+        <!-- <model name='citizen_extras_female_02'>
             <link name='link'>
                 <inertial>
                     <mass>20</mass>
@@ -1844,7 +1844,7 @@
                 <kinematic>0</kinematic>
             </link>
             <pose frame=''>-2.27486 -11.6692 0.010903 0.012548 0.002316 3.12694</pose>
-        </model>
+        </model> -->
         <model name='arm_chair'>
             <static>1</static>
             <link name='link'>

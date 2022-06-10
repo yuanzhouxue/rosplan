@@ -119,11 +119,11 @@ class SphericalGrasps(object):
 
         # Setup Markers for debugging
         self.poses_pub = rospy.Publisher(
-            '/sphere_poses', PoseArray, latch=True)
+            '/sphere_poses', PoseArray, latch=True, queue_size=10)
         self.grasps_pub = rospy.Publisher(
-            '/grasp_poses', PoseArray, latch=True)
+            '/grasp_poses', PoseArray, latch=True, queue_size=10)
         self.object_pub = rospy.Publisher(
-            '/object_marker', Marker, latch=True)
+            '/object_marker', Marker, latch=True, queue_size=10)
 
         rospy.loginfo("SphericalGrasps initialized!")
 

@@ -1,0 +1,15 @@
+functions:
+    - $(find tiago_transfer_demo)/scripts/rosplan_sensing_interface.py
+
+topics:
+    in_hand:
+        params:
+            - glass_cup
+        topic: /gripper_controller/state
+        msg_type: control_msgs/JointTrajectoryControllerState
+        # operation: msg.actual.positions[0] - msg.desired.positions[0] + msg.actual.positions[1] - msg.desired.positions[1] > 0.01
+    emptyhand:
+        params:
+            - glass_cup
+        topic: /gripper_controller/state
+        msg_type: control_msgs/JointTrajectoryControllerState

@@ -170,7 +170,7 @@
                 </trajectory>
             </script>
         </actor>
-        <actor name="actor1">
+        <!-- <actor name="actor1">
             <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">
                 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
                   0.01
@@ -313,7 +313,7 @@
                     </waypoint>
                 </trajectory>
             </script>
-        </actor>
+        </actor> -->
         <model name='ground_plane'>
             <static>1</static>
             <link name='link'>
@@ -819,10 +819,10 @@
                 </link>
             </model>
             <model name='table'>
-                <pose frame=''>-2.67867 1.28669 -0.25 0 -0 0</pose>
+                <pose frame=''>-2.67867 1.28669 -0.1 0 -0 0</pose>
                 <scale>1 1 1</scale>
                 <link name='link'>
-                    <pose frame=''>-2.67867 1.28669 -0.25 0 -0 0</pose>
+                    <pose frame=''>-2.67867 1.28669 -0.1 0 -0 0</pose>
                     <velocity>0 0 0 0 -0 0</velocity>
                     <acceleration>0 0 0 0 -0 0</acceleration>
                     <wrench>0 0 0 0 -0 0</wrench>
@@ -2722,8 +2722,8 @@
                     <surface>
                         <friction>
                             <ode>
-                                <mu>30</mu>
-                                <mu2>30</mu2>
+                                <mu>3000</mu>
+                                <mu2>3000</mu2>
                                 <fdir1>0 0 0</fdir1>
                             </ode>
                             <torsional>
