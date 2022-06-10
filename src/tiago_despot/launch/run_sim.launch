@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <include file="$(find tiago_despot)/launch/controller.launch" />
+    <include file="$(find tiago_transfer_demo)/launch/tiago_pick_nav.launch" />
+</launch>

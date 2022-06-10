@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <node name="pomdp_planner" type="pomdp_planner" pkg="tiago_despot" output="screen">
+        <param name="pick_node_name" value="action_pick" />
+        <param name="place_node_name" value="action_place" />
+        <param name="goto_node_name" value="action_goto" />
+        <param name="inhand_node_name" value="sensor_inhand" />
+    </node>
+</launch>
